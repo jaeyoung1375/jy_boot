@@ -1,0 +1,14 @@
+@charset "EUC-KR";
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    
+}
+
+.member_page{
+    text-align: center;
+    font-size: 30px;
+}

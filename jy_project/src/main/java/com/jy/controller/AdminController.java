@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jy.model.MemberVO;
 import com.jy.service.AdminService;
@@ -34,12 +35,26 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/memberManage", method=RequestMethod.GET)
-	public String memberManage(MemberVO member, Model model) {
+	public String memberManage(@RequestParam(required = false, defaultValue ="1") int page, 
+							   @RequestParam(required = false, defaultValue = "10") int naviSize,
+			Model model) {
 		
 		log.info("회원관리 페이지 진입");
 		
-		List<MemberVO> list = adminService.MemberList();
-		model.addAttribute("list",list);
+		int totalCnt = adminService.count();
+		model.addAttribute("totalCnt",totalCnt);
+		
+		int totalPage = (totalCnt + naviSize -1) / 10;
+		model.addAttribute("totalPage",totalPage);
+		
+		int beginPage = (page/10) * 10 +1;
+		int endPage = Math.min(beginPage+9,totalPage);
+		model.addAttribute("beginPage",beginPage);
+		model.addAttribute("endPage",endPage);
+		
+		
+//		List<MemberVO> list = adminService
+//		model.addAttribute("list",list);
 		
 		
 		return "/admin/memberManage";

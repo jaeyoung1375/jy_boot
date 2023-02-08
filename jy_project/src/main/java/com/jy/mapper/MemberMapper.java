@@ -17,5 +17,8 @@ public interface MemberMapper {
 	
 	// 로그인
 	public MemberVO memberLogin(MemberVO member);
+	
+	// 상세 조회
+	public MemberVO selectOne(String memberId);
 
 }

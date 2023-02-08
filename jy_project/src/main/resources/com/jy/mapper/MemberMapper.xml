@@ -27,5 +27,11 @@
   	select * from jy_member where memberId = #{memberId} and memberPw = #{memberPw} 
   	
   	</select>
+  	
+  	<select id="selectOne" resultType="com.jy.model.MemberVO">
+  		
+  		select * from jy_member where memberId = #{memberId}
+  		
+  	</select>
   
   </mapper>

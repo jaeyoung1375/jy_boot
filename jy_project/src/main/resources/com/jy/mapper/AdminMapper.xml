@@ -26,4 +26,14 @@
   	select count(*) from jy_member
   	</select>
   	
+  	<select id="getListPaging" resultType="com.jy.model.MemberVO">
+  		
+  		select * from(
+  			select TMP.*, rownum RN from(
+  				select * from jy_member order by createDt desc
+  			)TMP
+  		)where RN between #{beginPage} and #{endPage}
+  		
+  	</select>
+  	
   </mapper>

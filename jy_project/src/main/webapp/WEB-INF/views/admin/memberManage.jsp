@@ -69,6 +69,18 @@
             </table>
         </div>
         
+        <!-- 페이지 네비게이션 -->
+        <c:forEach var="i" begin="${beginPage}" end="${endPage}" step="1">
+        	<c:choose>
+        		<c:when test="${page ==i}">
+        		${i}
+        		</c:when>
+        		<c:otherwise>
+        			<a href="memberManage?page=${i}">${i}</a>
+        		</c:otherwise>
+        	</c:choose>
+        </c:forEach>
+        
       
 </body>
 </html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.jy.mapper.MemberMapper">
+  
+  	<!-- 회원가입 -->
+  	<insert id="memberJoin">
+  		
+  		insert into jy_member values(#{memberId}, #{memberPw}, #{memberName}, #{memberNickName}, #{mail}, 0, sysdate)
+  	
+  	</insert> 
+  	
+  	<!-- 아이디 중복검사 -->
+  	<select id="memberIdChk" resultType="int">
+  	
+  	select count(*) from jy_member where memberId = #{memberId}
+  	</select>
+  	
+  	<select id="memberNickNameChk" resultType="int">
+  	
+  	select count(*) from jy_member where memberNickName = #{memberNickName}
+  	</select>
+  	
+  	<select id="memberLogin" resultType="com.jy.model.MemberVO">
+  	
+  	select * from jy_member where memberId = #{memberId} and memberPw = #{memberPw} 
+  	
+  	</select>
+  
+  </mapper>

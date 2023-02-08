@@ -1,19 +1,17 @@
 package com.jy.controller;
 
 import java.util.Random;
-import java.util.regex.Pattern;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,8 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jy.model.MemberVO;
 import com.jy.service.MemberService;
 
-
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 
 @Controller
@@ -57,7 +53,7 @@ public class MemberController {
 			return "redirect:/member/login";
 		}
 		
-		session.setAttribute("member", lvo); // 로그인 성공시 세션을 "member"로 넘겨줌
+		session.setAttribute("member",lvo.getMemberId()); // 로그인 성공시 세션을 "member"로 넘겨줌
 		log.info("로그인 성공 !");
 		return "redirect:/";
 	}
@@ -165,6 +161,15 @@ public class MemberController {
 		String num = Integer.toString(checkNum);
 		
 		return num;
+	}
+	
+	@GetMapping("/mypage")
+	public String mypage(HttpSession session, Model model) {
+		
+		String memberId =(String) session.getAttribute("member");
+		log.info("memberId : "+memberId);
+		model.addAttribute("list",memberService.selectOne(memberId));
+		return "/member/mypage";
 	}
 	
 	
