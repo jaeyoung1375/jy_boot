@@ -26,9 +26,7 @@
   	select count(*) from jy_member
   	</select>
   	
-<<<<<<< HEAD
-  	
-=======
+
   	<select id="getListPaging" resultType="com.jy.model.MemberVO">
   		
   		select * from(
@@ -38,6 +36,6 @@
   		)where RN between #{beginPage} and #{endPage}
   		
   	</select>
->>>>>>> branch 'master' of https://github.com/jaeyoung1375/jy_boot.git
+
   	
   </mapper>
