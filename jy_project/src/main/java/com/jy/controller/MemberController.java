@@ -1,19 +1,17 @@
 package com.jy.controller;
 
 import java.util.Random;
-import java.util.regex.Pattern;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,8 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jy.model.MemberVO;
 import com.jy.service.MemberService;
 
-
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 
 @Controller
@@ -123,6 +119,25 @@ public class MemberController {
 			return "success";
 		}
 	}
+	
+//	// 아이디 찾기
+//	@RequestMapping(value="/memberIdSearch", method=RequestMethod.GET)
+//	public String memberIdSearch() {
+//		
+//		return "/member/memberIdSearch";
+//	}
+//	
+//	@RequestMapping(value="/memberIdSearch", method=RequestMethod.POST)
+//	public String memberIdSearch(@ModelAttribute MemberVO member, Model model) {
+//		
+//		MemberVO findMember = memberService.memberIdSearch(member);
+//		log.info(memberService.memberIdSearch(member));
+//		model.addAttribute("list",findMember);
+//		
+//		return "/member/test";
+//	}
+	
+	
 	
 	// 이메일 인증
 	@RequestMapping(value="/mailCheck", method=RequestMethod.GET)

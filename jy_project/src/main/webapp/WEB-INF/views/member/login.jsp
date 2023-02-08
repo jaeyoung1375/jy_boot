@@ -33,7 +33,7 @@
     	     <c:if test = "${result == 0}">
     	     <div class="login_warn">사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.</div>
     	     </c:if>
-			<label><input type="checkbox" name="rememberId" ${empty cookie.id.value ? "" : "checked"}> 아이디 기억</label> 
+			<label><input type="checkbox" name="rememberId" ${empty cookie.id.value ? "" : "checked"}> 아이디 기억</label>
 			 <input type="button" class="btn" id="login_button" value="L O G I N"/>
 			</form>
 		</div>

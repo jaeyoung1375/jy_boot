@@ -40,4 +40,11 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.memberLogin(member);
 	}
 
+
+	@Override
+	public MemberVO memberIdSearch(MemberVO member) {
+		
+		return memberMapper.memberIdSearch(member);
+	}
+
 }

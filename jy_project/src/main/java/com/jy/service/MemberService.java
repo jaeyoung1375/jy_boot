@@ -15,5 +15,8 @@ public interface MemberService {
 	
 	// 로그인
 	public MemberVO memberLogin(MemberVO member);
+	
+	// 아이디 찾기
+	public MemberVO memberIdSearch(MemberVO member);
 
 }

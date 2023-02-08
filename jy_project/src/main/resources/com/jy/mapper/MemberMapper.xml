@@ -27,5 +27,10 @@
   	select * from jy_member where memberId = #{memberId} and memberPw = #{memberPw} 
   	
   	</select>
+  	
+  	<!-- 아이디 찾기 -->
+  	<select id="memberIdSearch" resultType="com.jy.model.MemberVO">
+  		select memberId from jy_member where memberNickName = #{memberNickName}
+  	</select>
   
   </mapper>

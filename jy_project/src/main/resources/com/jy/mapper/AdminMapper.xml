@@ -26,4 +26,6 @@
   	select count(*) from jy_member
   	</select>
   	
+  	
+  	
   </mapper>
