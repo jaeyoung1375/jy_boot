@@ -14,5 +14,8 @@ public interface AdminService {
 	
 	/* 회원 수정 */
 	public int memberUpdate(MemberVO member);
+	
+	/* 전체 회원 개수 */
+	public int count();
 
 }

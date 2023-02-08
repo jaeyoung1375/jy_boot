@@ -34,4 +34,10 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.memberUpdate(member);
 	}
 
+	@Override
+	public int count() {
+		
+		return adminMapper.count();
+	}
+
 }

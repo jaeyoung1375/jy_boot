@@ -1,0 +1,16 @@
+create table jy_member(
+    memberId varchar2(40) primary key not null,
+    memberPw varchar2(40) not null,
+    memberName varchar2(21) not null,
+    memberNickName varchar2(30) unique not null,
+    memberEmail varchar2(50) unique not null,
+    adminCk number(1) default 0,
+    createDt DATE
+    );
+
+select * from jy_member order by createDt desc;
+
+select memberId from jy_member;
+
+insert into jy_member values('jaeyoung1375','1234','테스트1','테스트1','테스트1',0,sysdate);
+commit;

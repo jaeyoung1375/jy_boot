@@ -28,9 +28,16 @@
   	
   	</select>
   	
+<<<<<<< HEAD
   	<!-- 아이디 찾기 -->
   	<select id="memberIdSearch" resultType="com.jy.model.MemberVO">
   		select memberId from jy_member where memberNickName = #{memberNickName}
+=======
+  	<select id="selectOne" resultType="com.jy.model.MemberVO">
+  		
+  		select * from jy_member where memberId = #{memberId}
+  		
+>>>>>>> branch 'master' of https://github.com/jaeyoung1375/jy_boot.git
   	</select>
   
   </mapper>

@@ -57,7 +57,7 @@
             <div class="my_menu">
                 <ul>
                     <li>
-                        <a href="#">
+                        <a href="/member/mypage">
                             <span class="blind"><i class="far fa-user fa-lg"></i></span>
                         </a>
                     </li>

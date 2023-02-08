@@ -11,7 +11,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.ModelAttribute;
+=======
+import org.springframework.web.bind.annotation.GetMapping;
+>>>>>>> branch 'master' of https://github.com/jaeyoung1375/jy_boot.git
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,7 +57,7 @@ public class MemberController {
 			return "redirect:/member/login";
 		}
 		
-		session.setAttribute("member", lvo); // 로그인 성공시 세션을 "member"로 넘겨줌
+		session.setAttribute("member",lvo.getMemberId()); // 로그인 성공시 세션을 "member"로 넘겨줌
 		log.info("로그인 성공 !");
 		return "redirect:/";
 	}
@@ -180,6 +184,15 @@ public class MemberController {
 		String num = Integer.toString(checkNum);
 		
 		return num;
+	}
+	
+	@GetMapping("/mypage")
+	public String mypage(HttpSession session, Model model) {
+		
+		String memberId =(String) session.getAttribute("member");
+		log.info("memberId : "+memberId);
+		model.addAttribute("list",memberService.selectOne(memberId));
+		return "/member/mypage";
 	}
 	
 	

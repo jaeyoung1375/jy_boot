@@ -42,9 +42,15 @@ public class MemberServiceImpl implements MemberService{
 
 
 	@Override
+<<<<<<< HEAD
 	public MemberVO memberIdSearch(MemberVO member) {
 		
 		return memberMapper.memberIdSearch(member);
+=======
+	public MemberVO selectOne(String memberId) {
+		
+		return memberMapper.selectOne(memberId);
+>>>>>>> branch 'master' of https://github.com/jaeyoung1375/jy_boot.git
 	}
 
 }
