@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
+ 
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,14 +75,20 @@
 					<c:forEach items="${list}" var="list">
 						<tr>
 							<td><c:out value="${list.bno}"/></td>
-							<td><c:out value="${list.title}"/></td>
+							<td>
+							<a class="move" href='<c:out value="${list.bno}"/>'><c:out value="${list.title}"/></a>
+							</td>
 							<td><c:out value="${list.writer}"/></td>
-							<td><c:out value="${list.regdate}"/></td>
-							<td><c:out value="${list.updateDate}"/></td>
+							<td><fmt:formatDate pattern="yyyy/MM/dd" value="${list.regdate}"/></td>
+							<td><fmt:formatDate pattern="yyyy/MM/dd" value="${list.updateDate}"/></td>
+								
+									
 						</tr>
 					</c:forEach>
 			</table>
+			<form id="moveForm" method="get"></form>
 		</div>
+		
 
 
 
@@ -98,7 +106,25 @@
 					if(result === 'enroll success'){
 						alert("등록이 완료되었습니다.");
 					}
+					
+					if(result === 'modify success'){
+						alert("수정이 완료되었습니다.");
+					}
+					
+					if(result === 'delete success'){
+						alert("삭제가 완료되었습니다.");
+					}
 				}
+			});
+			
+			let moveForm = $("#moveForm");
+			
+			$(".move").click(function(e){
+				e.preventDefault();
+				
+				moveForm.append("<input type='hidden' name='bno' value='"+$(this).attr("href")+"'>");
+				moveForm.attr("action","/board/get");
+				moveForm.submit();
 			});
 		
 		</script>

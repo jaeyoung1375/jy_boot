@@ -18,24 +18,28 @@ import lombok.extern.log4j.Log4j2;
 
 @Controller
 @Log4j2
-@RequestMapping("/board/*")
+@RequestMapping("/board")
 public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
 	
 	@GetMapping("/list")
-	public void boardListGET(Model model) {
+	public String boardListGET(Model model) {
 		log.info("게시판 목록 페이지 진입");
 		
 		List list = boardService.boardList();
 		
 		model.addAttribute("list",list);
+		
+		return "/board/list";
 	}
 	
 	@GetMapping("/enroll")
-	public void boardEnrollGET() {
+	public String boardEnrollGET() {
 		log.info("게시판 등록 페이지 진입");
+		
+		return "/board/enroll";
 	}
 	
 	@PostMapping("/enroll")
@@ -45,6 +49,45 @@ public class BoardController {
 		boardService.enroll(board);
 		
 		rttr.addFlashAttribute("result","enroll success");
+		
+		return "redirect:/board/list";
+	}
+	
+	@GetMapping("/get")
+	public String selectOne(int bno, Model model) {
+		
+		log.info("게시판 상세조회 진입");
+		model.addAttribute("pageInfo",boardService.selectOne(bno));
+		
+		return "/board/get";
+		
+	}
+	
+	@GetMapping("/modify")
+	public String modify(int bno, Model model) {
+		
+		log.info("게시판 수정 페이지 진입 ");
+		model.addAttribute("pageInfo",boardService.selectOne(bno));
+		
+		return "/board/modify";
+	}
+	
+	@PostMapping("/modify")
+	public String modify(BoardVO board, RedirectAttributes rttr) {
+		
+		boardService.modify(board);
+		
+		rttr.addFlashAttribute("result","modify success");
+		
+		return "redirect:/board/list";
+		
+	}
+	
+	@PostMapping("/delete")
+	public String delete(int bno, RedirectAttributes rttr) {
+		
+		boardService.delete(bno);
+		rttr.addFlashAttribute("result", "delete success");
 		
 		return "redirect:/board/list";
 	}

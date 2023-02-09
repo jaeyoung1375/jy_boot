@@ -1,6 +1,8 @@
 package com.jy.model;
 
-import java.sql.Date;
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class BoardVO {
 	
@@ -15,6 +17,7 @@ public class BoardVO {
 	// 게시판 등록일
 	private Date regdate;
 	// 게시판 수정일
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private Date updateDate;
 	public int getBno() {
 		return bno;

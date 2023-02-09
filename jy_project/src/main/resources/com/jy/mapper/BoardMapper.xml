@@ -14,4 +14,23 @@
   	select * from notice_board order by bno desc
   	</select>
   	
+  	<select id="selectOne" resultType="com.jy.model.BoardVO">
+  	
+  	select * from notice_board where bno = #{bno}
+  	
+  	</select>
+  	
+  	<update id="modify">
+  	
+  	update notice_board set title = #{title}, content = #{content}, updateDate = sysdate where bno = #{bno}
+  	
+  	</update>
+  	
+  	<delete id="delete">
+  	
+  	delete from notice_board where bno = #{bno}
+  	
+  	</delete>
+
+  	
   </mapper>
