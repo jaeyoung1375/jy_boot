@@ -6,13 +6,31 @@
   
   	<insert id="enroll">
   		
-  		insert into notice_board(title,content,writer) values(#{title},#{content},#{writer})
+  		insert into notice_board(bno,title,content,writer) values(notice_board_seq.nextval,#{title},#{content},#{writer})
   	</insert>
   	
   	<select id="boardList" resultType="com.jy.model.BoardVO">
   	
   	select * from notice_board order by bno desc
   	</select>
+  	
+  	<!-- 게시물 목록(페이징) -->
+  	<select id="getListPaging" resultType="com.jy.model.BoardVO">
+  	
+  	<![CDATA[
+  	
+  		select bno,title,content,writer,regdate,updateDate from(
+  			
+  			select rownum as rn, bno, title, content, writer, regdate, updateDate
+  			
+  			from notice_board where rownum <= #{pageNum} * #{amount})
+  			
+  			where rn > (#{pageNum} -1) * #{amount}
+  	
+  	]]>
+  	
+  	</select>
+  	
   	
   	<select id="selectOne" resultType="com.jy.model.BoardVO">
   	
@@ -31,6 +49,12 @@
   	delete from notice_board where bno = #{bno}
   	
   	</delete>
+  	
+  	<select id="getTotal" resultType="int">
+  	
+  	select count(*) from notice_board
+  	
+  	</select>
 
   	
   </mapper>

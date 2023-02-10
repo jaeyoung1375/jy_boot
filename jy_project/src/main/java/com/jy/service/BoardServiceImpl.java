@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.jy.mapper.BoardMapper;
 import com.jy.model.BoardVO;
-
+import com.jy.model.Criteria;
 
 import lombok.extern.log4j.Log4j2;
 @Service
@@ -54,6 +54,20 @@ public class BoardServiceImpl implements BoardService {
 		
 		log.info("게시판 삭제");
 		return boardMapper.delete(bno);
+	}
+
+
+	@Override
+	public List<BoardVO> getListPaging(Criteria cri) {
+		
+		return boardMapper.getListPaging(cri);
+	}
+
+
+	@Override
+	public int getTotal() {
+		
+		return boardMapper.getTotal();
 	}
 
 }

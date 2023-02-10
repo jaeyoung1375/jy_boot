@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jy.model.BoardVO;
+import com.jy.model.Criteria;
+import com.jy.model.PageMakeDTO;
 import com.jy.service.BoardService;
 
 import lombok.extern.log4j.Log4j;
@@ -24,17 +26,31 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+//	@GetMapping("/list")
+//	public String boardListGET(Model model) {
+//		log.info("게시판 목록 페이지 진입");
+//		
+//		List list = boardService.boardList();
+//		
+//		model.addAttribute("list",list);
+//		
+//		return "/board/list";
+//	}
+	
 	@GetMapping("/list")
-	public String boardListGET(Model model) {
+	public String boardList(Model model, Criteria cri) {
+		
 		log.info("게시판 목록 페이지 진입");
 		
-		List list = boardService.boardList();
+		model.addAttribute("list",boardService.getListPaging(cri));
 		
-		model.addAttribute("list",list);
+		int total = boardService.getTotal();
+		
+		PageMakeDTO pageMake = new PageMakeDTO(cri, total);
+		model.addAttribute("pageMaker",pageMake);
 		
 		return "/board/list";
 	}
-	
 	@GetMapping("/enroll")
 	public String boardEnrollGET() {
 		log.info("게시판 등록 페이지 진입");

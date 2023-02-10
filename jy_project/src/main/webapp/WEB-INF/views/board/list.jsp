@@ -86,7 +86,18 @@
 						</tr>
 					</c:forEach>
 			</table>
-			<form id="moveForm" method="get"></form>
+			<div class="pageInfo_wrap">
+				<div class="pageInfo_area">
+					<c:forEach var="num" begin="${pageMaker.beginPage}" end="${pageMaker.endPage}">
+						<li class="pageInfo_btn"><a href="${num}">${num}</a></li>
+					</c:forEach>
+				</div>
+			</div>
+			
+			<form id="moveForm" method="get">
+				<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+				<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+			</form>
 		</div>
 		
 
@@ -124,6 +135,13 @@
 				
 				moveForm.append("<input type='hidden' name='bno' value='"+$(this).attr("href")+"'>");
 				moveForm.attr("action","/board/get");
+				moveForm.submit();
+			});
+			
+			$(".pageInfo a").click(function(e){
+				e.preventDefault();
+				moveForm.find("input[name='pageNum']").val($(this).attr("href"));
+				moveForm.attr("action","/board/list");
 				moveForm.submit();
 			});
 		
