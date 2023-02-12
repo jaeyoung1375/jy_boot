@@ -70,30 +70,33 @@ public class BoardController {
 	}
 	
 	@GetMapping("/get")
-	public String selectOne(int bno, Model model) {
+	public String selectOne(int bno, Model model, Criteria cri) {
 		
 		log.info("게시판 상세조회 진입");
 		model.addAttribute("pageInfo",boardService.selectOne(bno));
+		model.addAttribute("cri",cri);
 		
 		return "/board/get";
 		
 	}
 	
 	@GetMapping("/modify")
-	public String modify(int bno, Model model) {
+	public String modify(int bno, Model model, Criteria cri) {
 		
 		log.info("게시판 수정 페이지 진입 ");
 		model.addAttribute("pageInfo",boardService.selectOne(bno));
+		model.addAttribute("cri",cri);
 		
 		return "/board/modify";
 	}
 	
 	@PostMapping("/modify")
-	public String modify(BoardVO board, RedirectAttributes rttr) {
+	public String modify(BoardVO board, RedirectAttributes rttr, Criteria cri, Model model) {
 		
 		boardService.modify(board);
 		
 		rttr.addFlashAttribute("result","modify success");
+		model.addAttribute("cri",cri);
 		
 		return "redirect:/board/list";
 		
