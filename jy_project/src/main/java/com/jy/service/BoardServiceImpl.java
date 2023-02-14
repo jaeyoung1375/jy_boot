@@ -70,4 +70,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getTotal(cri);
 	}
 
+
+	@Override
+	public int updateRead(int bno) {
+		
+		return boardMapper.updateRead(bno);
+	}
+
 }

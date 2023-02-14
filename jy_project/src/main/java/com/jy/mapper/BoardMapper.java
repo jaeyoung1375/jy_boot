@@ -30,6 +30,9 @@ public interface BoardMapper {
 	// 게시판 총 개수
 	public int getTotal(Criteria cri);
 	
+	// 조회수 증가
+	public int updateRead(int bno);
+	
 		
 	
 

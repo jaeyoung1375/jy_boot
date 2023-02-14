@@ -1,6 +1,10 @@
 package com.jy.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -70,14 +74,34 @@ public class BoardController {
 	}
 	
 	@GetMapping("/get")
-	public String selectOne(int bno, Model model, Criteria cri) {
+	public String selectOne(int bno, Model model, Criteria cri, HttpSession session) {
 		
 		log.info("게시판 상세조회 진입");
 		model.addAttribute("pageInfo",boardService.selectOne(bno));
 		model.addAttribute("cri",cri);
 		
-		return "/board/get";
+		BoardVO board = boardService.selectOne(bno);
+		String memberId = (String) session.getAttribute("member");
+		boolean owner = board.getWriter() != null &&
+						board.getWriter().equals(memberId);
+		model.addAttribute("owner",owner);
 		
+		if(!owner) {
+			Set<Integer> memory = (Set<Integer>) session.getAttribute("memory");
+			if(memory == null) {
+				memory = new HashSet<>();
+			}
+			
+			if(!memory.contains(bno)) {
+				boardService.updateRead(bno);
+				board.setUpdateRead(board.getUpdateRead()+1);
+				memory.add(bno);
+			}
+			System.out.println("memory = "+memory);
+			session.setAttribute("memory", memory);
+		}
+	
+		return "/board/get";		
 	}
 	
 	@GetMapping("/modify")

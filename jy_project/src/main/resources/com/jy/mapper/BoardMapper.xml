@@ -91,6 +91,11 @@
   	</if> 
   	
   	</select>
+  	
+  	<update id="updateReadCount">
+  	
+  	update notice_board set updateRead = updateRead + 1 where bno = #{bno}
+  	</update>
 
   	
   </mapper>
