@@ -45,6 +45,9 @@
                     <li>
                         <a href="#">고객센터</a>
                     </li>
+                    <li>
+                    	<a href="/board/list">게시판</a>
+                    </li>
                 </ul>
             </div>
             <div class="header_search">

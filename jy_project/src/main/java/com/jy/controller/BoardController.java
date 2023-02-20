@@ -82,6 +82,7 @@ public class BoardController {
 		
 		BoardVO board = boardService.selectOne(bno);
 		String memberId = (String) session.getAttribute("member");
+		
 		boolean owner = board.getWriter() != null &&
 						board.getWriter().equals(memberId);
 		model.addAttribute("owner",owner);
@@ -93,7 +94,7 @@ public class BoardController {
 			}
 			
 			if(!memory.contains(bno)) {
-				boardService.updateRead(bno);
+				boardService.updateReadCount(bno);
 				board.setUpdateRead(board.getUpdateRead()+1);
 				memory.add(bno);
 			}

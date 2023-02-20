@@ -16,37 +16,77 @@
   a{
   	text-decoration : none;
   }
-  table{
- 	border-collapse: collapse;
- 	width: 1000px;    
- 	margin-top : 20px;
- 	text-align: center;
-  }
-  td, th{
-  	border : 1px solid black;
-  	height: 50px;
-  }
-  th{
-  	font-size : 17px;
-  }
-  thead{
-  	font-weight: 700;
-  }
-  .table_wrap{
-  	margin : 50px 0 0 50px;
-  }
-  .bno_width{
-  	width: 12%;
-  }
-  .writer_width{
-  	width: 20%;
-  }
-  .regdate_width{
-  	width: 15%;
-  }
-  .updatedate_width{
-  	width: 15%;
-  }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+
+.table_wrap{
+	text-align: center;
+}
+
+.board-table {
+  font-size: 13px;
+  width: 80%;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.board-table a {
+  color: #333;
+  display: inline-block;
+  line-height: 1.4;
+  word-break: break-all;
+  vertical-align: middle;
+}
+.board-table a:hover {
+  text-decoration: underline;
+}
+.board-table th {
+  text-align: center;
+}
+
+.board-table .th-num {
+  width: 100px;
+  text-align: center;
+}
+.board-table .th-writer {
+  width: 400px;
+}
+
+.board-table .th-date {
+  width: 200px;
+}
+
+.board-table .th-read {
+  width: 200px;
+}
+
+.board-table th, .board-table td {
+  padding: 14px 0;
+}
+
+.board-table tbody td {
+  border-top: 1px solid #e7e7e7;
+  text-align: center;
+}
+
+.board-table tbody th {
+  padding-left: 28px;
+  padding-right: 14px;
+  border-top: 1px solid #e7e7e7;
+  text-align: left;
+}
+
+.board-table tbody th p{
+  display: none;
+}
+
+
+
   .top_btn{
   	font-size: 20px;
     padding: 6px 12px;
@@ -54,16 +94,20 @@
     border: 1px solid #ddd;
     font-weight: 600;
   }
+  .pageInfo_wrap{
+  	display:flex;
+  	justify-content: center;
+  }
   .pageInfo{
   	list-style:none;
   	display:flex;
-  	margin : 50px 0 0 100px;
+  	
   }
   
   .pageInfo li{
   	float:left;
   	font-size: 20px;
-  	margin-left : 18px;
+  	
   	padding : 7px;
   	font-weight : 500;
   }
@@ -72,11 +116,13 @@
   .search_area{
     display: inline-block;
     margin-top: 30px;
-    margin-left: 260px;
+     
+    
   }
   .search_area input{
       height: 30px;
     width: 250px;
+   
   }
   .search_area button{
      width: 100px;
@@ -85,6 +131,7 @@
   
   .search_area select{
   	height:35px;
+  	text-align:center;
   }
   
   a:link {color:black; text-decoration: none;}
@@ -98,30 +145,30 @@
   </style>  
 </head>
 <body>
-<h1>목록페이지입니다.</h1>
+	<%@include file="../include/header.jsp" %>
 
 
 		<div class="table_wrap">
 			<a href="/board/enroll" class="top_btn">게시판 등록</a>
-			<table>
-				<thead>
-					<tr>
-						<th class="bno_width">번호</th>
-						<th class="title_width">제목</th>
-						<th class="writer_width">작성자</th>
-						<th class="regdate_width">등록일</th>
-						<th class="updatedate_width">수정일</th>
-					</tr>
-				</thead>
+			 <table class="board-table">
+                <thead>
+                <tr>
+                    <th scope="col" class="th-num">번호</th>
+                    <th scope="col" class="th-title">제목</th>
+                    <th scope="col" class="th-writer">작성자</th>
+                    <th scope="col" class="th-date">등록일</th>
+                    <th scope="col" class="th-read">조회수</th>
+                </tr>
+                </thead>
 					<c:forEach items="${list}" var="list">
 						<tr>
 							<td><c:out value="${list.bno}"/></td>
 							<td>
 							<a class="move" href='<c:out value="${list.bno}"/>'><c:out value="${list.title}"/></a>
 							</td>
-							<td><c:out value="${list.writer}"/></td>
+							 <td><c:out value="${list.writer}"/></td> 
 							<td><fmt:formatDate pattern="yyyy/MM/dd" value="${list.regdate}"/></td>
-							<td><fmt:formatDate pattern="yyyy/MM/dd" value="${list.updateDate}"/></td>
+							 <td><c:out value="${list.updateRead}"/></td> 
 								
 									
 						</tr>
@@ -131,7 +178,7 @@
 			<div class="search_wrap">
 				<div class="search_area">
 					    <select name="type">
-                <option value="" <c:out value="${pageMaker.cri.type == null?'selected':'' }"/>>--</option>
+              
                 <option value="T" <c:out value="${pageMaker.cri.type eq 'T'?'selected':'' }"/>>제목</option>
                 <option value="C" <c:out value="${pageMaker.cri.type eq 'C'?'selected':'' }"/>>내용</option>
                 <option value="W" <c:out value="${pageMaker.cri.type eq 'W'?'selected':'' }"/>>작성자</option>

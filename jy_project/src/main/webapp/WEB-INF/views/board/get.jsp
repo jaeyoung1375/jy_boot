@@ -77,6 +77,10 @@ textarea{
 				<label>게시판 수정일</label>
 				<input type="text" name="updateDate" value='<fmt:formatDate pattern="yyyy/MM/dd" value="${pageInfo.updateDate}"/>' readonly>
 			</div>
+			<div class="input_wrap">
+				<label>조회수</label>
+				<input type="text" name="updateRead" value='<c:out value="${pageInfo.updateRead}"/>' readonly>
+			</div>
 			<div class="btn_wrap">
 				<a class="btn" id="list_btn">목록 페이지</a>
 				<a class="btn" id="modify_btn">수정 하기</a>

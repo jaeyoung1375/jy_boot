@@ -54,6 +54,7 @@
                     <th>닉네임</th>
                     <th>이메일</th> 
                     <th>가입일자</th>
+               
                  </tr>
                 </thead>
              	<c:forEach items="${list}" var="list">
@@ -64,6 +65,7 @@
              	<td><c:out value="${list.memberNickName}"/></td>
              	<td><c:out value="${list.memberEmail}"/></td>
              	<td><fmt:formatDate value="${list.createDt}" pattern="yyyy-MM-dd"/></td>
+             	
              	</tr>
              	</tbody>
              	</c:forEach>

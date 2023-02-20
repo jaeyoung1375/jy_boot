@@ -72,9 +72,9 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public int updateRead(int bno) {
+	public int updateReadCount(int bno) {
 		
-		return boardMapper.updateRead(bno);
+		return boardMapper.updateReadCount(bno);
 	}
 
 }

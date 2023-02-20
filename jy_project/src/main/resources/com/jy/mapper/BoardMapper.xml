@@ -40,11 +40,11 @@
   	
   	<![CDATA[
   	
-  		select bno,title,content,writer,regdate,updateDate from(
+  		select bno,title,content,writer,regdate,updateDate, updateRead from(
   			
-  			select rownum as rn, bno, title, content, writer, regdate, updateDate 
+  			select rownum as rn, bno, title, content, writer, regdate, updateDate, updateRead 
   			
-  			from notice_board where rownum <= #{pageNum} * #{amount}  
+  			from notice_board where rownum <= #{pageNum} * #{amount} order by bno desc  
   			
   		
   	

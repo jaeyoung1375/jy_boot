@@ -31,7 +31,7 @@ public interface BoardMapper {
 	public int getTotal(Criteria cri);
 	
 	// 조회수 증가
-	public int updateRead(int bno);
+	public int updateReadCount(int bno);
 	
 		
 	
