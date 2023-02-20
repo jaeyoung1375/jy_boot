@@ -6,7 +6,12 @@
   	
   	<select id="MemberList" resultType="com.jy.model.MemberVO">
   		
-  		select * from jy_member order by createDt desc
+  		select * from(
+  			select TMP.*, rownum RN from(
+  				select * from jy_member order by createDt desc
+  			)TMP
+  		)where RN between #{begin} and #{end}
+  		
   	</select>
   	
   	<select id="selectOne" resultType="com.jy.model.MemberVO">
@@ -27,15 +32,6 @@
   	</select>
   	
 
-  	<select id="getListPaging" resultType="com.jy.model.MemberVO">
-  		
-  		select * from(
-  			select TMP.*, rownum RN from(
-  				select * from jy_member order by createDt desc
-  			)TMP
-  		)where RN between #{beginPage} and #{endPage}
-  		
-  	</select>
-
+  
   	
   </mapper>

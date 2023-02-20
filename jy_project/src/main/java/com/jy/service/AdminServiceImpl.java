@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jy.mapper.AdminMapper;
 import com.jy.model.MemberVO;
+import com.jy.model.PaginationVO;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -15,9 +16,9 @@ public class AdminServiceImpl implements AdminService{
 	private AdminMapper adminMapper;
 	
 	/* 회원 목록 */
-	public List<MemberVO> MemberList(){
+	public List<MemberVO> MemberList(PaginationVO vo){
 		
-		List<MemberVO> list = adminMapper.MemberList();
+		List<MemberVO> list = adminMapper.MemberList(vo);
 		
 		return list;
 	}

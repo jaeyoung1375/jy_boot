@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="/css/admin/main.css">
+<link rel="stylesheet" href="/css/admin/memberManage.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&display=swap" rel="stylesheet">
@@ -70,17 +71,19 @@
         </div>
         
         <!-- 페이지 네비게이션 -->
-        <c:forEach var="i" begin="${beginPage}" end="${endPage}" step="1">
-        	<c:choose>
-        		<c:when test="${page ==i}">
-        		${i}
-        		</c:when>
-        		<c:otherwise>
-        			<a href="memberManage?page=${i}">${i}</a>
-        		</c:otherwise>
-        	</c:choose>
-        </c:forEach>
-        
+       <div class="page_wrap">
+       	<div class="page_nation">
+	       	<c:if test="${vo.startBlock != 1 }">
+	       		<a class="arrow prev"href="memberManage?page=${vo.prevPage}">&lt;</a>
+	       	</c:if>
+	       		<c:forEach var="i" begin="${vo.startBlock}" end="${vo.finishBlock}">
+	       			<a href="memberManage?page=${i}">${i}</a>
+	       		</c:forEach>
+	       	<c:if test="${vo.page != vo.totalPage}">
+	       		<a class="arrow next" href="memberManage?list=${vo.nextPage}">&gt;</a>
+	       	</c:if>
+	      </div> 	
+       </div>
       
 </body>
 </html>
