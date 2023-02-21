@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
+import com.jy.model.ProductDTO;
 
 public interface AdminService {
 	
@@ -18,5 +19,8 @@ public interface AdminService {
 	
 	/* 전체 회원 개수 */
 	public int count();
+	
+	/* 상품 목록 */
+	public List<ProductDTO> productList();
 
 }

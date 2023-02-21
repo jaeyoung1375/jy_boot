@@ -21,7 +21,7 @@
 		</div>
 		<div class="input_wrap">
 			<label>writer</label>
-			<input name="writer">
+			<input name="writer" value="${memberId}" readonly>
 		</div>
 		<button class="btn">등록</button>
 	</form>

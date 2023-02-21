@@ -31,6 +31,10 @@
   	select count(*) from jy_member
   	</select>
   	
+  	 <select id="productList" resultType="com.jy.model.ProductDTO">
+  	select * from product order by product_no desc
+  </select>
+  	
 
   
   	

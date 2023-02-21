@@ -42,50 +42,46 @@
     </nav>
 
         <div class="member_page">
-            회원관리 페이지
+            상품관리 페이지
         </div>
 
         <div class="container">
             <table class="table" border="1">
                 <thead class="table-dark">	
                 <tr>
-                    <th>아이디</th>
-                    <th>이름</th>
-                    <th>닉네임</th>
-                    <th>이메일</th> 
-                    <th>가입일자</th>
-               
+                    <th>번호</th>
+                    <th>상품명</th>
+                    <th>상품가격</th>
+                    <th>상품수량</th> 
                  </tr>
                 </thead>
              	<c:forEach items="${list}" var="list">
              	<tbody>
              	<tr>
-             	<td><a href="/admin/memberDetail?memberId=${list.memberId}" ><c:out value="${list.memberId}"/></a></td>
-             	<td><c:out value="${list.memberName}"/></td>
-             	<td><c:out value="${list.memberNickName}"/></td>
-             	<td><c:out value="${list.memberEmail}"/></td>
-             	<td><fmt:formatDate value="${list.createDt}" pattern="yyyy-MM-dd"/></td>
-             	
+             	<td><c:out value="${list.productNo}"/></td>
+             	<td><c:out value="${list.productName}"/></td>
+             	<td><c:out value="${list.productPrice}"/></td>
+             	<td><c:out value="${list.productStock}"/></td>           	
              	</tr>
              	</tbody>
              	</c:forEach>
             </table>
         </div>
-        
-        <!-- 페이지 네비게이션 -->
+        <!-- 
+ 
        <div class="page_wrap">
        	<div class="page_nation">
 	       	<c:if test="${vo.startBlock != 1 }">
-	       		<a class="arrow prev"href="memberManage?page=${vo.prevPage}">&lt;</a>
+	       		<a class="arrow prev"href="productManage?page=${vo.prevPage}">&lt;</a>
 	       	</c:if>
 	       		<c:forEach var="i" begin="${vo.startBlock}" end="${vo.finishBlock}">
-	       			<a href="memberManage?page=${i}">${i}</a>
+	       			<a href="productManage?page=${i}">${i}</a>
 	       		</c:forEach>
 	       	<c:if test="${vo.page != vo.totalPage}">
-	       		<a class="arrow next" href="memberManage?list=${vo.nextPage}">&gt;</a>
+	       		<a class="arrow next" href="productManage?list=${vo.nextPage}">&gt;</a>
 	       	</c:if>
 	      </div> 	
        </div>
-      
+       -->
 </body>
 </html>

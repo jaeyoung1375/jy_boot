@@ -56,8 +56,10 @@ public class BoardController {
 		return "/board/list";
 	}
 	@GetMapping("/enroll")
-	public String boardEnrollGET() {
+	public String boardEnrollGET(HttpSession session,Model model) {
 		log.info("게시판 등록 페이지 진입");
+		String memberId = (String) session.getAttribute("member");
+		model.addAttribute("memberId",memberId);
 		
 		return "/board/enroll";
 	}

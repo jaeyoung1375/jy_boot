@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
+import com.jy.model.ProductDTO;
 import com.jy.service.AdminService;
+import com.jy.service.ProductService;
 
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
@@ -74,6 +76,15 @@ public class AdminController {
 		
 		return "redirect:/admin/memberManage";
 	}
+	
+	@GetMapping("/productManage")
+	public String productManage(Model model) {
+		
+		
+		model.addAttribute("list",adminService.productList());
+		return "/admin/productManage";
+	}
+	
 	
 
 }

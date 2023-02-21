@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jy.mapper.AdminMapper;
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
+import com.jy.model.ProductDTO;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -39,6 +40,12 @@ public class AdminServiceImpl implements AdminService{
 	public int count() {
 		
 		return adminMapper.count();
+	}
+
+	@Override
+	public List<ProductDTO> productList() {
+		
+		return adminMapper.ProductList();
 	}
 
 }

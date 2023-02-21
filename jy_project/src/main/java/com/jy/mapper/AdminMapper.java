@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
+import com.jy.model.ProductDTO;
 @Mapper
 public interface AdminMapper {
 	
@@ -20,5 +21,8 @@ public interface AdminMapper {
 	
 	/* 전체 회원 개수 */
 	public int count();
+	
+	/* 상품 목록 */
+	public List<ProductDTO> ProductList();
 
 }
