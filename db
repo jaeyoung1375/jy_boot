@@ -14,3 +14,16 @@ select memberId from jy_member;
 
 insert into jy_member values('jaeyoung1375','1234','테스트1','테스트1','테스트1',0,sysdate);
 commit;
+
+
+-- 상품 테이블
+
+create table product(
+product_no number not null primary key,
+product_name varchar2(50) not null,
+product_price number not null,
+product_stock number not null,
+product_description varchar2(2000) not null
+);
+
+create sequence product_seq;
