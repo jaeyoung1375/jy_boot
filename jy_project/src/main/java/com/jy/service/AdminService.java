@@ -22,5 +22,11 @@ public interface AdminService {
 	
 	/* 상품 목록 */
 	public List<ProductDTO> productList();
+	
+	/* 상품 상세 */
+	public ProductDTO productSelectOne(int productNo);
+	
+	/* 상품 등록 */
+	public void productEnroll(ProductDTO dto);
 
 }

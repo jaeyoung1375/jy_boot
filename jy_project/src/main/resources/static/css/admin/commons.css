@@ -1,0 +1,254 @@
+@charset "UTF-8";
+
+/*
+    commons.css
+    이 파일에는 자주 사용하는 작은 화면에 대한 클래스가 존재
+    제작일자 : 2023-02-22
+    제작자 : 피카츄
+*/
+
+
+/*
+    모든 홈페이지의 화면은 N줄 1칸 형태라고 생각한다
+    필요한 태그는 외부 div와 내부 div 두 가지이다.
+    - div는 기본적으로 폭이 100%이므로 원하는 크기로 변경해야함
+*/
+* {
+    box-sizing: border-box;
+    font-family: '빙그레 메로나체';
+}
+
+.auto{
+	margin : 0 auto;
+}
+
+
+/* 
+    container는 표시될 폭과 정렬방식을 가운데로 설정 
+    가운데라고만 하면 너무 애매하므로 다음과 같이 세분화
+    1. 내용물을 가운데 정렬한다 (text-align)
+    2. 자신을 가운데 정렬한다 (margin auto)
+        - auto는 자동으로 계산해서 가능한 값을 부여하라는 의미
+*/
+.container-200 {
+    width:200px;
+    margin:0 auto;
+}
+.container-300 {
+    width:300px;
+    margin:0 auto;
+}
+.container-400 {
+    width:400px;
+    margin:0 auto;
+}
+.container-500 {
+    width:500px;
+    margin:0 auto;
+}
+.container-600 {
+    width:600px;
+    margin:0 auto;
+}
+.container-700 {
+    width:700px;
+    margin:0 auto;
+}
+.container-800 {
+    width:800px;
+    margin:0 auto;
+}
+.container-900 {
+    width:900px;
+    margin:0 auto;
+}
+.container-1000 {
+    width:1000px;
+    margin:0 auto;
+}
+
+/* row와 row 사이에는 일정한 간격을 설정 */
+.row {
+    margin:10px 0px;
+}
+
+/*
+    입력창, 버튼에 관련된 디자인
+    .form-input - 입력창
+    .form-btn - 버튼
+    같은 형태로 쓰기 때문에 색상 등을 제외한 나머지 크기가 동일해야함
+*/
+.form-input {
+    font-size: 20px;
+    padding: 0.5em;
+    outline: none;/*선택 시 강조 효과 제거*/
+    border: 1px solid #636e72;
+    border-radius: 0.1em;
+}
+.form-input:focus {/*커서가 위치했을 때*/
+    border-color: black;
+}
+
+/*
+    textarea는 리사이즈(resize)에 대한 설정이 필요하다
+    - resize:vertical 은 수직 변경만 가능
+    - resize:none 은 변경 불가
+    만약 resize가 vertical이면 최소높이(min-height)가 지정되어야 한다
+*/
+textarea.form-input {
+    resize: vertical;
+    min-height: 10em;
+}
+
+/*
+    추가 스타일
+    - 파일 선택창은 테두리를 나오게 하지 않겠다
+*/
+input[type=file].form-input {
+    border-color: transparent;
+}
+
+/*
+    버튼은 역할에 따라 색상이 다르다
+    - 긍정 버튼은 초록~파랑 계열
+    - 부정 버튼은 주황~빨강 계열
+    - 중립 버튼은 흑백 계열
+*/
+.form-btn {
+    font-size: 20px;
+    padding: 0.5em;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0.1em;
+    cursor: pointer;
+}
+
+/*
+    a 태그를 버튼과 동일한 모양으로 만들 수 있도록 개조
+    - display=inline 이므로 block 속성이 들어가게 개조(폭 설정)
+    - text-align으로 글자를 가운데 정렬
+    - text-decoration으로 밑줄을 제거
+*/
+a.form-btn {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* 버튼 스타일 */
+/*.form-btn과 .positive가 같이 있으면*/
+.form-btn.positive {
+    background-color: #0984e3;
+    border-color: #0984e3;
+    color: white;
+}
+.form-btn.negative {
+    background-color: #d63031;
+    border-color: #d63031;
+    color: white;
+}
+.form-btn.neutral {
+    background-color: #dfe6e9;
+    border-color: #dfe6e9;
+    color: black;
+}
+
+.form-btn.neutral2 {
+    background-color: #34495e;
+    border-color: #34495e;
+    color: white;
+}
+
+
+.form-btn:hover {
+    filter:brightness(105%);/*원래보다 5% 밝게 처리*/
+}
+
+/* 폭 설정 클래스 */
+.w-100 {width:100%;}
+.w-90 {width:90%;}
+.w-80 {width:80%;}
+.w-75 {width:75%;}
+.w-70 {width:70%;}
+.w-60 {width:60%;}
+.w-50 {width:50%;}
+.w-40 {width:40%;}
+.w-30 {width:30%;}
+.w-25 {width:25%;}
+.w-20 {width:20%;}
+.w-10 {width:10%;}
+
+/* 내부 요소 정렬 클래스 */
+.center {text-align: center;}
+.left {text-align: left;}
+.right {text-align: right;}
+
+/*
+    외부 여백(margin)을 부여할 수 있도록 설정(10~50px)
+    .mt - margin top
+    .mb - margin bottom
+    .ms - margin start(left)
+    .me - margin end(right)
+    내부 여백(padding)을 부여할 수 있도록 설정(10~50px)
+    .pt - padding top
+    .pb - padding bottom
+    .ps - padding start(left)
+    .pe - padding end(right)
+*/
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+.mt-40 { margin-top: 40px; }
+.mt-50 { margin-top: 50px; }
+
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-30 { margin-bottom: 30px; }
+.mb-40 { margin-bottom: 40px; }
+.mb-50 { margin-bottom: 50px; }
+
+.ms-10 { margin-left: 10px; }
+.ms-20 { margin-left: 20px; }
+.ms-30 { margin-left: 30px; }
+.ms-40 { margin-left: 40px; }
+.ms-50 { margin-left: 50px; }
+
+.me-10 { margin-right: 10px; }
+.me-20 { margin-right: 20px; }
+.me-30 { margin-right: 30px; }
+.me-40 { margin-right: 40px; }
+.me-50 { margin-right: 50px; }
+
+.pt-10 { padding-top: 10px; }
+.pt-20 { padding-top: 20px; }
+.pt-30 { padding-top: 30px; }
+.pt-40 { padding-top: 40px; }
+.pt-50 { padding-top: 50px; }
+
+.pb-10 { padding-bottom: 10px; }
+.pb-20 { padding-bottom: 20px; }
+.pb-30 { padding-bottom: 30px; }
+.pb-40 { padding-bottom: 40px; }
+.pb-50 { padding-bottom: 50px; }
+
+.ps-10 { padding-left: 10px; }
+.ps-20 { padding-left: 20px; }
+.ps-30 { padding-left: 30px; }
+.ps-40 { padding-left: 40px; }
+.ps-50 { padding-left: 50px; }
+
+.pe-10 { padding-right: 10px; }
+.pe-20 { padding-right: 20px; }
+.pe-30 { padding-right: 30px; }
+.pe-40 { padding-right: 40px; }
+.pe-50 { padding-right: 50px; }
+
+/*
+    label 디자인
+    - label은 inline이 기본값이다
+    - .form-label은 inline-block으로 변경
+*/
+.form-label {
+    display: inline-block;
+}
+

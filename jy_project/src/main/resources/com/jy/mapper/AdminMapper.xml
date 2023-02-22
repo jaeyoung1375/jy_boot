@@ -31,9 +31,20 @@
   	select count(*) from jy_member
   	</select>
   	
-  	 <select id="productList" resultType="com.jy.model.ProductDTO">
-  	select * from product order by product_no desc
+  <select id="productList" resultType="com.jy.model.ProductDTO">
+  	select product_no, product_name, product_price, product_stock from product
   </select>
+  
+  <select id="productSelectOne" resultType="com.jy.model.ProductDTO">
+  	select * from product where product_no = #{productNo}
+  </select>
+  
+  <insert id="productEnroll">
+  	insert into product(product_no, product_name, product_price, product_stock, product_description, product_cateCode)
+  	values(product_seq.nextval, #{productName}, #{productPrice}, #{productStock}, #{productDescription}, #{productCateCode})
+  </insert>
+  
+  
   	
 
   

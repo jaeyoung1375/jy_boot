@@ -45,7 +45,17 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<ProductDTO> productList() {
 		
-		return adminMapper.ProductList();
+		return adminMapper.productList();
+	}
+
+	@Override
+	public ProductDTO productSelectOne(int productNo) {
+		return adminMapper.productSelectOne(productNo);
+	}
+
+	@Override
+	public void productEnroll(ProductDTO dto) {
+		adminMapper.productEnroll(dto);
 	}
 
 }

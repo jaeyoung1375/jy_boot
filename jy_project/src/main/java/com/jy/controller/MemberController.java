@@ -12,9 +12,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,14 +37,15 @@ public class MemberController {
 	private JavaMailSender mailSender;
 	
 	// 로그인 페이지 이동
-	@RequestMapping(value="/login", method=RequestMethod.GET)
+	@GetMapping("/login")
 	public String loginGET() {
 		
 		return "member/login";
 	}
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String loginPOST(MemberVO member, HttpServletRequest request, RedirectAttributes rttr) {
+	@PostMapping("/login")
+	public String loginPOST(@ModelAttribute MemberVO member,
+			                HttpServletRequest request, RedirectAttributes rttr) {
 		
 		HttpSession session = request.getSession();
 		MemberVO lvo = memberService.memberLogin(member);
@@ -59,7 +62,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	@RequestMapping(value="/logout", method=RequestMethod.GET)
+	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
@@ -73,15 +76,15 @@ public class MemberController {
 	
 	
 	// 회원가입 페이지 이동
-	@RequestMapping(value="/join", method=RequestMethod.GET)
+	@GetMapping("/join")
 	public String joinGET() {
 		
 		return "member/join";
 	}
 	
 	// 회원가입 기능
-	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String joinPOST(MemberVO member) {
+	@PostMapping("/join")
+	public String joinPOST(@ModelAttribute MemberVO member) {
 		
 		memberService.memberJoin(member);
 		
@@ -89,9 +92,9 @@ public class MemberController {
 	}
 	
 	// 아이디 중복검사
-	@RequestMapping(value="/memberIdChk", method=RequestMethod.POST)
+	@PostMapping("/memberIdChk")
 	@ResponseBody
-	public String memberIdChk(String memberId) throws Exception{
+	public String memberIdChk(@RequestParam String memberId) throws Exception{
 		
 		log.info("memberIdChk() 진입 " );
 		int result = memberService.memberIdChk(memberId);
@@ -106,9 +109,9 @@ public class MemberController {
 	
 	
 	// 닉네임 중복검사
-	@RequestMapping(value="/memberNickNameChk", method=RequestMethod.POST)
+	@PostMapping("/memberNickNameChk")
 	@ResponseBody
-	public String memberNickNameChk(String memberNickName) throws Exception{
+	public String memberNickNameChk(@RequestParam String memberNickName) throws Exception{
 			
 		log.info("memberNickNameChk() 진입 " );
 		int result = memberService.memberNickNameChk(memberNickName);
@@ -141,10 +144,9 @@ public class MemberController {
 	
 	
 	// 이메일 인증
-	@RequestMapping(value="/mailCheck", method=RequestMethod.GET)
+	@GetMapping("/mailCheck")
 	@ResponseBody
-
-	public String mailCheckGET(String email) throws Exception{
+	public String mailCheckGET(@RequestParam String email) throws Exception{
 		
 		/* 뷰(view)로 부터 넘어온 데이터 확인 */
 		log.info("이메일 데이터 전송 확인");

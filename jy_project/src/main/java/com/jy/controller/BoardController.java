@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jy.model.BoardVO;
@@ -42,7 +44,8 @@ public class BoardController {
 //	}
 	
 	@GetMapping("/list")
-	public String boardList(Model model, Criteria cri) {
+	public String boardList(Model model, 
+							@ModelAttribute Criteria cri) {
 		
 		log.info("게시판 목록 페이지 진입");
 		
@@ -65,7 +68,8 @@ public class BoardController {
 	}
 	
 	@PostMapping("/enroll")
-	public String boardEnrollPOST(BoardVO board, RedirectAttributes rttr) {
+	public String boardEnrollPOST(@ModelAttribute BoardVO board,
+								  RedirectAttributes rttr) {
 		
 		log.info("boardVO : "+board);
 		boardService.enroll(board);
@@ -76,7 +80,9 @@ public class BoardController {
 	}
 	
 	@GetMapping("/get")
-	public String selectOne(int bno, Model model, Criteria cri, HttpSession session) {
+	public String selectOne(@RequestParam int bno, Model model,
+							@ModelAttribute Criteria cri, 
+							HttpSession session) {
 		
 		log.info("게시판 상세조회 진입");
 		model.addAttribute("pageInfo",boardService.selectOne(bno));
@@ -108,7 +114,8 @@ public class BoardController {
 	}
 	
 	@GetMapping("/modify")
-	public String modify(int bno, Model model, Criteria cri) {
+	public String modify(@RequestParam int bno, Model model, 
+						 @ModelAttribute Criteria cri) {
 		
 		log.info("게시판 수정 페이지 진입 ");
 		model.addAttribute("pageInfo",boardService.selectOne(bno));
@@ -118,7 +125,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/modify")
-	public String modify(BoardVO board, RedirectAttributes rttr, Criteria cri, Model model) {
+	public String modify(@ModelAttribute BoardVO board, RedirectAttributes rttr, Criteria cri, Model model) {
 		
 		boardService.modify(board);
 		
@@ -130,7 +137,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/delete")
-	public String delete(int bno, RedirectAttributes rttr) {
+	public String delete(@RequestParam int bno, RedirectAttributes rttr) {
 		
 		boardService.delete(bno);
 		rttr.addFlashAttribute("result", "delete success");
