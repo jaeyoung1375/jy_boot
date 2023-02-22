@@ -23,7 +23,8 @@ product_no number not null primary key,
 product_name varchar2(50) not null,
 product_price number not null,
 product_stock number not null,
-product_description varchar2(2000) not null
+product_description varchar2(2000) not null,
+product_cateCode varchar2(30)
 );
 
 create sequence product_seq;
