@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.jy.model.cateVO;
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
 import com.jy.model.ProductDTO;
@@ -30,6 +31,9 @@ public interface AdminMapper {
 	
 	/* 상품 등록 */
 	public void productEnroll(ProductDTO dto);
+	
+	// 카테고리 리스트
+	public List<cateVO> cateList();
 	
 
 }

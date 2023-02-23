@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/admin/header.jsp" %>
 <link rel="stylesheet" href="/css/admin/commons.css">
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 <style>
 table{
 	border : 2px solid #16a085;
@@ -70,19 +74,23 @@ thead{
        -->
        
        <script>
-       		$(document).ready(function(){
-       			
-       			let eResult = '<c:out value="${enroll_result}"/>';
-       			
-       			checkResult(eResult);
-       			
-       			function checkResult(result){
-       				if(reslt === ''){
-       					return;
-       				}
-       				alert("상품'"+eResult+"'을 등록하였습니다.");
-       			}
-       		});
+       $(document).ready(function(){
+    		
+    		let eResult = '<c:out value="${enroll_result}"/>';
+    		
+    		checkResult(eResult);
+    		
+    		function checkResult(result){
+    			
+    			if(result === ''){
+    				return;
+    			}
+    			
+    			alert("상품'"+ eResult +"'을 등록하였습니다.");
+    			
+    		}
+
+    	});
        </script>
 </body>
 </html>

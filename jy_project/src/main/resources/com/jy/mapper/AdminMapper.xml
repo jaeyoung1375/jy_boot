@@ -45,6 +45,12 @@
   </insert>
   
   
+  <!-- 카테고리 리스트 -->
+  <select id="cateList" resultType="com.jy.model.cateVO">
+  	select * from product_cate order by cateCode
+  </select>
+  
+  
   	
 
   

@@ -3,6 +3,8 @@ package com.jy.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jy.model.cateVO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
 import com.jy.model.ProductDTO;
@@ -93,8 +98,16 @@ public class AdminController {
 	
 	// 상품 등록 페이지
 	@GetMapping("/productEnroll")
-	public String productEnroll() {
+	public String productEnroll(Model model) throws Exception {
 		
+		ObjectMapper objm = new ObjectMapper();
+		
+		List list = adminService.cateList();
+		
+		// Java 객체를 String타입의 JSON형식 데이터로 변환해준다
+		String cateList = objm.writeValueAsString(list);
+		model.addAttribute("cateList",cateList);
+			
 		return "/admin/productEnroll";
 	}
 	
@@ -104,8 +117,10 @@ public class AdminController {
 		adminService.productEnroll(dto);
 		rttr.addFlashAttribute("enroll_result",dto.getProductName());
 		
-		return "redirect:/admin/main";
+		return "redirect:/admin/productManage";
 	}
+	
+	
 	
 	
 	

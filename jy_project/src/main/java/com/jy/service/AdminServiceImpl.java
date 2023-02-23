@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jy.mapper.AdminMapper;
+import com.jy.model.cateVO;
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
 import com.jy.model.ProductDTO;
@@ -56,6 +57,12 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void productEnroll(ProductDTO dto) {
 		adminMapper.productEnroll(dto);
+	}
+
+	@Override
+	public List<cateVO> cateList() {
+		
+		return adminMapper.cateList();
 	}
 
 }
