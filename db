@@ -1,3 +1,5 @@
+
+
 create table jy_member(
     memberId varchar2(40) primary key not null,
     memberPw varchar2(40) not null,
@@ -14,3 +16,60 @@ select memberId from jy_member;
 
 insert into jy_member values('jaeyoung1375','1234','테스트1','테스트1','테스트1',0,sysdate);
 commit;
+
+
+-- 상품 테이블
+
+create table product(
+product_no number not null primary key,
+product_name varchar2(50) not null,
+product_price number not null,
+product_stock number not null,
+product_description varchar2(2000) not null,
+product_cateCode varchar2(30)
+);
+
+create sequence product_seq;
+
+
+-- 카테고리 테이블
+create table product_cate(
+    tier number(1) not null,
+    cateName varchar2(30) not null,
+    cateCode varchar2(30) not null primary key,
+    cateParent varchar2(30) references product_cate(cateCode)
+    );
+
+
+-- 데이터 
+insert into product_cate(tier, cateName, cateCode) values (1, '닭가슴살', '100');
+insert into product_cate(tier, cateName, cateCode) values (1, '도시락/볶음밥', '200');
+insert into product_cate(tier, cateName, cateCode) values (1, '샐러드', '300');
+insert into product_cate(tier, cateName, cateCode) values (1, '간식', '400');
+
+insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '한입 닭가슴살', '101','100'); 
+ insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '소스 닭가슴살', '102','100'); 
+  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 스테이크', '103','100'); 
+ insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 소시지', '104','100'); 
+ insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '수비드/슬라이스', '105','100');     
+    
+
+ insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 볶음밥', '201','200'); 
+  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '곤약 볶음밥', '202','200'); 
+   insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '다이어트 도시락', '203','200'); 
+    insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '반찬 도시락', '204','200'); 
+     insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '프라이 도시락', '205','200'); 
+ 
+
+  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 핫도그', '301','300');
+   insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 만두', '302','300');
+    insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '곤약 떡볶이', '303','300');
+     insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 만두', '304','300');
+      insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 밥바', '305','300');
+ 
+  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 도시락', '401','400');
+   insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '야채 샐러드', '402','400');
+    insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 베이커리', '403','400');
+     insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 스테이크', '404','400');
+      insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '토핑 샐러드', '405','400');
+ 
