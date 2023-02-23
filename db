@@ -61,15 +61,15 @@ insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '한�
      insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '프라이 도시락', '205','200'); 
  
 
-  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 핫도그', '301','300');
-   insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 만두', '302','300');
-    insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '곤약 떡볶이', '303','300');
-     insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 만두', '304','300');
-      insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 밥바', '305','300');
+  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 핫도그', '401','400');
+   insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 만두', '402','400');
+    insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '곤약 떡볶이', '403','400');
+     insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 만두', '404','400');
+      insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '닭가슴살 밥바', '405','400');
  
-  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 도시락', '401','400');
-   insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '야채 샐러드', '402','400');
-    insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 베이커리', '403','400');
-     insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 스테이크', '404','400');
-      insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '토핑 샐러드', '405','400');
+  insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 도시락', '301','300');
+   insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '야채 샐러드','302','300');
+    insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 베이커리', '303','300');
+     insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '비건 스테이크', '304','300');
+      insert into product_cate(tier, cateName, cateCode, cateParent) values (2, '토핑 샐러드', '305','300');
  
