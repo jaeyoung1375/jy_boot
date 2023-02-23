@@ -19,6 +19,13 @@ select{
     text-align-last: center;
     margin-left: 5px;
 }
+.ck_warn{						/* 입력란 공란 경고 태그 */
+	display: none;
+    padding-top: 10px;
+    text-align: center;
+    color: #e05757;
+    font-weight: 300;    
+}
 </style>
   
   
@@ -30,18 +37,22 @@ select{
 	<div class="row">
 		<label>상품 이름</label>
 		<input type="text" name="productName" class="form-input w-100">
+		<span class="ck_warn productName_warn">상품 이름을 입력해주세요.</span>
 	</div>
 	<div class="row">
 	<label>상품 가격</label>
 		<input type="text" name="productPrice" class="form-input w-100">
+		<span class="ck_warn productPrice_warn">상품 가격을 입력해주세요.</span>
 	</div>
 	<div class="row">
 	<label>상품 수량</label>
 		<input type="number" name="productStock" class="form-input w-100">
+		<span class="ck_warn productStock_warn">상품 수량을 입력해주세요.</span>
 	</div>
 	<div class="row">
 	<label>상품 설명</label>
 		<textarea class="form-input w-100" name="productDescription" id="productDescription"></textarea>
+		<span class="ck_warn productDescription_warn">상품 설명을 입력해주세요.</span>
 	</div>
 	<div class="row">
 	<label>대분류</label>
@@ -51,9 +62,10 @@ select{
 	</div>
 	<div>
 	<label>중분류</label>
-		<select class="cate2" name="cateCode">
+		<select class="cate2" name="productCateCode">
 			<option selected value="none">선택</option>
 		</select>
+		<span class="ck_warn productCateCode_warn">카테고리를 입력해주세요.</span>
 	</div>
 	<div class="row right">
 		<button class="form-btn positive" id="enrollBtn">등록</button>
@@ -63,12 +75,75 @@ select{
 	
 <script>
 
+	
+
 	let enrollForm = $("#enrollForm");
 
 	$("#enrollBtn").click(function(e){
 		e.preventDefault();
 		
-		enrollForm.submit();
+		/* 체크 변수 */
+		let produtNameCk = false;
+		let productPriceCk = false;
+		let productStockCk = false;
+		let productDescriptionCk = false;
+		let productCateCodeCk = false;
+		
+		/* 체크 대상 변수 */
+		let productName = $("input[name='productName']").val();
+		let productPrice = $("input[name='productPrice']").val();
+		let productStock = $("input[name='productStock']").val();
+		let productDescription = $("input[name='productDescription']").val();
+		let productCateCode = $("select[name='productCateCode']").val();
+		
+		if(productName){
+			$(".productName_warn").css("display","none");
+			productNameCk = true;
+		}else{
+			$(".productName_warn").css("display","block");
+			productNameCk = false;
+		}
+		
+		if(productPrice){
+			$(".productPrice_warn").css("display","none");
+			productPriceCk = true;
+		}else{
+			$(".productPrice_warn").css("display","block");
+			productPriceCk = false;
+		}
+		
+		if(productStock){
+			$(".productStock_warn").css("display","none");
+			productStockCk = true;
+		}else{
+			$(".productStock_warn").css("display","block");
+			productStockCk = false;
+		}
+		
+		if(productDescription  != '<br data-cke-filler="true">'){
+			$(".productDescription_warn").css("display","none");
+			productDescriptionCk = true;
+		}else{
+			$(".productDescription_warn").css("display","block");
+			productDescriptionCk = false;
+		}
+		
+		if(productCateCode){
+			$(".productCateCode_warn").css("display","none");
+			productCateCodeCk = true;
+		}else{
+			$(".productCateCode_warn").css("display","block");
+			productCateCodeCk = false;
+		}
+		
+		
+		if(productNameCk && productPriceCk && productStockCk && productDescriptionCk && productCateCodeCk){
+			enrollForm.submit();
+		}else{
+			return false;
+		}
+		
+
 	});
 	
 	
@@ -121,6 +196,21 @@ select{
 	for(let i = 0; i<cate1Array.length; i++){
 		cateSelect1.append("<option value='"+cate1Array[i].cateCode+"'>"+cate1Array[i].cateName+"</option>");
 	}
+	
+	/* 중분류 <option> 태그 */
+	$(cateSelect1).on("change",function(){
+		let selectVal1 = $(this).find("option:selected").val();
+		cateSelect2.children().remove();
+		
+		cateSelect2.append("<option value='none'>선택</option>");
+		
+		for(let i = 0; i<cate2Array.length; i++){
+			if(selectVal1 === cate2Array[i].cateParent){
+				cateSelect2.append("<option value='"+cate2Array[i].cateCode+"'>"+cate2Array[i].cateName+"</option>");
+			}
+		}
+	});
+	
 	
 	
 
