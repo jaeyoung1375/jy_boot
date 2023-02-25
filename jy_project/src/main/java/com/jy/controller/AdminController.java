@@ -91,8 +91,11 @@ public class AdminController {
 	
 	// 상품 상세 페이지
 	@GetMapping("/productDetail")
-	public String productDetail(Model model, @RequestParam int productNo) {
+	public String productDetail(Model model, @RequestParam int productNo) throws JsonProcessingException {
 		model.addAttribute("productDto",adminService.productSelectOne(productNo));
+		ObjectMapper mapper = new ObjectMapper();
+		model.addAttribute("cateList",mapper.writeValueAsString(adminService.cateList()));
+		
 		return "/admin/productDetail";
 	}
 	

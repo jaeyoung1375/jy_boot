@@ -26,6 +26,11 @@ select{
     color: #e05757;
     font-weight: 300;    
 }
+.step_val{						/* 할인 가격 문구 */
+	display: block;
+    padding-top: 5px;
+    font-weight: 500;
+}
 </style>
   
   
@@ -43,6 +48,13 @@ select{
 	<label>상품 가격</label>
 		<input type="text" name="productPrice" class="form-input w-100">
 		<span class="ck_warn productPrice_warn">상품 가격을 입력해주세요.</span>
+	</div>
+	<div class="row">
+	<label>상품 할인율</label>
+	    <input id="discount_interface" maxlength="2"  class="form-input w-100"> 
+		<input type="hidden" name="productDiscount" class="form-input w-100">
+		<span class="step_val">할인 가격 : <span class="span_discount"></span></span>
+		<span class="ck_warn productDiscount_warn">1~99 사이의 숫자를 입력해주세요.</span>
 	</div>
 	<div class="row">
 	<label>상품 수량</label>
@@ -85,6 +97,7 @@ select{
 		/* 체크 변수 */
 		let produtNameCk = false;
 		let productPriceCk = false;
+		let productDiscountCk = false;
 		let productStockCk = false;
 		let productDescriptionCk = false;
 		let productCateCodeCk = false;
@@ -92,9 +105,10 @@ select{
 		/* 체크 대상 변수 */
 		let productName = $("input[name='productName']").val();
 		let productPrice = $("input[name='productPrice']").val();
+		let productDiscount = $("#discount_interface").val();
 		let productStock = $("input[name='productStock']").val();
 		let productDescription = $("input[name='productDescription']").val();
-		let productCateCode = $("select[name='productCateCode']").val();
+		let productCateCode = $(".cate2").val();
 		
 		if(productName){
 			$(".productName_warn").css("display","none");
@@ -110,6 +124,14 @@ select{
 		}else{
 			$(".productPrice_warn").css("display","block");
 			productPriceCk = false;
+		}
+		
+		if(!isNaN(productDiscount)){ // isNan 메서드는 파라미터 값이 문자인경우 true를 반환
+			$(".productDiscount_warn").css("display","none");
+			productDiscountCk = true;
+		}else{
+			$(".productDiscount_warn").css("display","block");
+			productDiscountCk = false;
 		}
 		
 		if(productStock){
@@ -137,7 +159,7 @@ select{
 		}
 		
 		
-		if(productNameCk && productPriceCk && productStockCk && productDescriptionCk && productCateCodeCk){
+		if(productNameCk && productPriceCk && productDiscountCk && productStockCk && productDescriptionCk && productCateCodeCk){
 			enrollForm.submit();
 		}else{
 			return false;
@@ -210,6 +232,40 @@ select{
 			}
 		}
 	});
+	
+	/* 할인율 input 설정 */
+	$("#discount_interface").on("propertychange change keyup paste input",function(){
+		
+		let userInput = $("#discount_interface");
+		let discountInput = $("input[name='productDiscount']");
+		
+		let discountRate = userInput.val(); // 사용자가 입력할 할인 값
+		let sendDiscountRate = discountRate / 100; // 서버에 전송할 할인 값
+		
+		let goodsPrice = $("input[name='productPrice']").val(); // 원가
+		let discountPrice = goodsPrice * (1-sendDiscountRate); // 할인가격
+		
+		if(!isNaN(discountRate)){
+			$(".span_discount").html(discountPrice);		
+			discountInput.val(sendDiscountRate);				
+		}
+		
+	});
+	
+	$("input[name='productPrice']").on("propertychange change keyup paste input",function(){
+		
+		let userInput = $("#discount_interface");
+		let discountInput = $("input[name='productDiscount']");
+		
+		let discountRate = userInput.val(); // 사용자가 입력할 할인 값
+		let sendDiscountRate = discountRate / 100; // 서버에 전송할 할인 값
+		
+		let goodsPrice = $("input[name='productPrice']").val(); // 원가
+		let discountPrice = goodsPrice * (1-sendDiscountRate); // 할인가격
+		
+		$(".span_discount").html(discountPrice);
+	});
+
 	
 	
 	

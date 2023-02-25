@@ -31,17 +31,20 @@
   	select count(*) from jy_member
   	</select>
   	
+  	<!-- 상품 목록 -->
   <select id="productList" resultType="com.jy.model.ProductDTO">
   	select product_no, product_name, product_price, product_stock from product
   </select>
   
+  	<!-- 상품 조회 -->
   <select id="productSelectOne" resultType="com.jy.model.ProductDTO">
   	select * from product where product_no = #{productNo}
   </select>
   
+  	<!-- 상품 등록 -->
   <insert id="productEnroll">
-  	insert into product(product_no, product_name, product_price, product_stock, product_description, product_cateCode)
-  	values(product_seq.nextval, #{productName}, #{productPrice}, #{productStock}, #{productDescription}, #{productCateCode})
+  	insert into product(product_no, product_name, product_price, product_discount, product_stock, product_description, product_cateCode)
+  	values(product_seq.nextval, #{productName}, #{productPrice}, #{productDiscount}, #{productStock}, #{productDescription}, #{productCateCode})
   </insert>
   
   
