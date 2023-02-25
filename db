@@ -30,7 +30,7 @@ product_cateCode varchar2(30)
 );
 
 create sequence product_seq;
-
+alter table product add foreign key (product_cateCode) references product_cate(cateCode);
 
 -- 카테고리 테이블
 create table product_cate(
