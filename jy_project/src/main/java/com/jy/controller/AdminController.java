@@ -91,7 +91,7 @@ public class AdminController {
 	
 	// 상품 상세 페이지
 	@GetMapping("/productDetail")
-	public String productDetail(Model model, @RequestParam int productNo) throws JsonProcessingException {
+	public String productDetail(Model model, @RequestParam int productNo) throws Exception {
 		model.addAttribute("productDto",adminService.productSelectOne(productNo));
 		ObjectMapper mapper = new ObjectMapper();
 		model.addAttribute("cateList",mapper.writeValueAsString(adminService.cateList()));
@@ -122,6 +122,28 @@ public class AdminController {
 		
 		return "redirect:/admin/productManage";
 	}
+	
+	// 상품 수정 페이지
+	@GetMapping("/productUpdate")
+	public String productUpdate(Model model, @RequestParam int productNo) throws Exception {
+		
+		model.addAttribute("productDto",adminService.productSelectOne(productNo));
+		ObjectMapper mapper = new ObjectMapper();
+		model.addAttribute("cateList",mapper.writeValueAsString(adminService.cateList()));
+		
+		return "/admin/productUpdate";
+	}
+	
+	@PostMapping("/productUpdate")
+	public String productUpdate(@ModelAttribute ProductDTO dto, RedirectAttributes rttr) {
+
+		
+		adminService.productUpdate(dto);
+		rttr.addAttribute("productNo",dto.getProductNo());
+		return "redirect:/admin/productDetail";
+	}
+	
+	
 	
 	
 	

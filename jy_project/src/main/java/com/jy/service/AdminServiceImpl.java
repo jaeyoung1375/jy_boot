@@ -65,4 +65,16 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.cateList();
 	}
 
+	@Override
+	public int productUpdate(ProductDTO dto) {
+		
+		return adminMapper.productUpdate(dto);
+	}
+
+	@Override
+	public int sequence() {
+		
+		return adminMapper.sequence();
+	}
+
 }

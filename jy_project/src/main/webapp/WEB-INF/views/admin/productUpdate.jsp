@@ -15,41 +15,42 @@
     margin-left: 5px;
 }
 </style>
-
+		<form action="productUpdate" method="post">
+		<input type="hidden" name="productNo" value="${productDto.productNo}">
 	<div class="container-700">
 		<div class="row center">
 			<h2>상품 상세페이지</h2>
 		</div>	
 		<div class="row">
-			<input name="productName" class="form-input w-100" value="${productDto.productName}" disabled>
+			<input name="productName" class="form-input w-100" value="${productDto.productName}">
 		</div>
 		<div class="row">
-			<input name="productName" class="form-input w-100" value="${productDto.productPrice}" disabled>
+			<input name="productPrice" class="form-input w-100" value="${productDto.productPrice}">
 		</div>
 		<div class="row">
-			<input name="productName" id="discount_interface" class="form-input w-100" value="${productDto.productDiscount}" disabled>
+			<input name="productDiscount" id="discount_interface" class="form-input w-100" value="${productDto.productDiscount}">
 		</div>
 		<div class="row">
-			<input name="productName" class="form-input w-100" value="${productDto.productStock}" disabled>
+			<input name="productStock" class="form-input w-100" value="${productDto.productStock}">
 		</div>
 		<div class="row">
 		<label>대분류</label>
-		<select class="cate1" disabled>
+		<select class="cate1">
 			<option selected value="none">선택</option>
 		</select>
 		</div>
 		<div class="row">
 		<label>중분류</label>
-		<select class="cate2" disabled>
+		<select class="cate2" name="productCateCode">
 			<option selected value="none">선택</option>
 		</select>
 		</div>
 		<div class="row center">
 			<a class="form-btn neutral2" href="/admin/productManage">목록으로</a>
-			<a class="form-btn positive" href="/admin/productUpdate?productNo=${productDto.productNo}">수정하기</a>
+			<button class="form-btn positive" type="submit">수정완료</button>
 		</div>
 	</div>
-	
+		</form>
 	
 	<script>
 		$(document).ready(function(){
@@ -87,6 +88,23 @@
 			/* 배열 초기화 */
 			makeCateArray(cate1Obj,cate1Array,cateList,1);
 			makeCateArray(cate2Obj,cate2Array,cateList,2);
+			
+			/* 중분류 <option> 태그 */
+			$(cateSelect1).on("change",function(){
+				let selectVal1 = $(this).find("option:selected").val();
+				cateSelect2.children().remove();
+				
+				cateSelect2.append("<option value='none'>선택</option>");
+				
+				for(let i = 0; i<cate2Array.length; i++){
+					if(selectVal1 === cate2Array[i].cateParent){
+						cateSelect2.append("<option value='"+cate2Array[i].cateCode+"'>"+cate2Array[i].cateName+"</option>");
+					}
+				}
+			});
+			
+			
+			
 			
 			let targetCate2 = '${productDto.productCateCode}';
 			

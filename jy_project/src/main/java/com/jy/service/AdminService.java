@@ -30,7 +30,13 @@ public interface AdminService {
 	/* 상품 등록 */
 	public void productEnroll(ProductDTO dto);
 	
-	// 카테고리 리스트
+	/* 상품 수정 */
+	public int productUpdate(ProductDTO dto);
+	
+	/* 카테고리 리스트 */
 	public List<cateVO> cateList();
+	
+	/* 시퀀스 구하기 */
+	public int sequence();
 
 }

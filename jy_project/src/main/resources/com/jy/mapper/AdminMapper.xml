@@ -47,12 +47,23 @@
   	values(product_seq.nextval, #{productName}, #{productPrice}, #{productDiscount}, #{productStock}, #{productDescription}, #{productCateCode})
   </insert>
   
+  <update id="productUpdate">
+  	
+  	update product set product_name = #{productName}, product_price = #{productPrice}, product_discount = #{productDiscount}, product_stock = #{productStock},
+  					   product_catecode = #{productCateCode} where product_no = #{productNo}
+  	
+  </update>
   
+ 
   <!-- 카테고리 리스트 -->
   <select id="cateList" resultType="com.jy.model.cateVO">
   	select * from product_cate order by cateCode
   </select>
   
+  <select id="sequence" resultType="int">
+  	
+  	select product_seq.nextval from dual
+  </select>
   
   	
 

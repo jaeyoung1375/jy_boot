@@ -35,5 +35,12 @@ public interface AdminMapper {
 	// 카테고리 리스트
 	public List<cateVO> cateList();
 	
+	/* 상품 수정 */
+	public int productUpdate(ProductDTO dto);
+	
+	/* 시퀀스 구하기 */
+	public int sequence();
+	
+	
 
 }
