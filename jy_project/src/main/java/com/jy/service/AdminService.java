@@ -33,6 +33,9 @@ public interface AdminService {
 	/* 상품 수정 */
 	public int productUpdate(ProductDTO dto);
 	
+	/* 상품 삭제 */
+	public int productDelete(int productNo);
+	
 	/* 카테고리 리스트 */
 	public List<cateVO> cateList();
 	

@@ -51,8 +51,8 @@ select{
 	</div>
 	<div class="row">
 	<label>상품 할인율</label>
-	    <input id="discount_interface" maxlength="2"  class="form-input w-100"> 
-		<input type="hidden" name="productDiscount" class="form-input w-100">
+	    <input id="discount_interface" maxlength="2" value="0" class="form-input w-100"> 
+		<input type="hidden" name="productDiscount" value="0" class="form-input w-100">
 		<span class="step_val">할인 가격 : <span class="span_discount"></span></span>
 		<span class="ck_warn productDiscount_warn">1~99 사이의 숫자를 입력해주세요.</span>
 	</div>
@@ -97,7 +97,7 @@ select{
 		/* 체크 변수 */
 		let produtNameCk = false;
 		let productPriceCk = false;
-		let productDiscountCk = false;
+		let discountCk = false;
 		let productStockCk = false;
 		let productDescriptionCk = false;
 		let productCateCodeCk = false;
@@ -128,10 +128,10 @@ select{
 		
 		if(!isNaN(productDiscount)){ // isNan 메서드는 파라미터 값이 문자인경우 true를 반환
 			$(".productDiscount_warn").css("display","none");
-			productDiscountCk = true;
+			discountCk = true;
 		}else{
 			$(".productDiscount_warn").css("display","block");
-			productDiscountCk = false;
+			discountCk = false;
 		}
 		
 		if(productStock){
@@ -159,7 +159,7 @@ select{
 		}
 		
 		
-		if(productNameCk && productPriceCk && productDiscountCk && productStockCk && productDescriptionCk && productCateCodeCk){
+		if(productNameCk && productPriceCk && discountCk && productStockCk && productDescriptionCk && productCateCodeCk){
 			enrollForm.submit();
 		}else{
 			return false;

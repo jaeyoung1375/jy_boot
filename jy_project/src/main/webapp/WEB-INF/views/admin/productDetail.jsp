@@ -132,6 +132,12 @@
 				}
 			});
 			
+			/* 수졍 결과 */
+			let updateResult = "${update_result}";
+			if(updateResult == 1){
+				alert("수정 완료");
+			}
+			
 			
 		});
 		

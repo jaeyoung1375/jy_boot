@@ -89,6 +89,13 @@ thead{
     			alert("상품'"+ eResult +"'을 등록하였습니다.");
     			
     		}
+    		
+    		/* 삭제 결과 경고창 */
+			let deleteResult = '${delete_result}';
+			
+			if(deleteResult == 1){
+				alert("삭제 완료");
+			}
 
     	});
        </script>

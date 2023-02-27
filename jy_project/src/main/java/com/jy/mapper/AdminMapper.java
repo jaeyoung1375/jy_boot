@@ -38,6 +38,9 @@ public interface AdminMapper {
 	/* 상품 수정 */
 	public int productUpdate(ProductDTO dto);
 	
+	/* 상품 삭제 */
+	public int productDelete(int productNo);
+	
 	/* 시퀀스 구하기 */
 	public int sequence();
 	

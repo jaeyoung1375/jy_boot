@@ -77,4 +77,10 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.sequence();
 	}
 
+	@Override
+	public int productDelete(int productNo) {
+		
+		return adminMapper.productDelete(productNo);
+	}
+
 }

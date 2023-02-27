@@ -85,7 +85,6 @@ public class AdminController {
 	public String productManage(Model model) {
 			
 		model.addAttribute("productDto",adminService.productList());
-		System.out.println(adminService.productList());
 		return "/admin/productManage";
 	}
 	
@@ -138,9 +137,22 @@ public class AdminController {
 	public String productUpdate(@ModelAttribute ProductDTO dto, RedirectAttributes rttr) {
 
 		
-		adminService.productUpdate(dto);
+		int result = adminService.productUpdate(dto);
 		rttr.addAttribute("productNo",dto.getProductNo());
+		rttr.addFlashAttribute("update_result",result);
+		
 		return "redirect:/admin/productDetail";
+	}
+	
+	// 상품 삭제 페이지
+	@PostMapping("/productDelete")
+	public String productDelete(@RequestParam int productNo, RedirectAttributes rttr) {
+		
+		int result = adminService.productDelete(productNo);
+
+		rttr.addFlashAttribute("delete_result",result);
+		
+		return "redirect:/admin/productManage";
 	}
 	
 	

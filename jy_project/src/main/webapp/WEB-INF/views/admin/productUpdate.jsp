@@ -15,7 +15,7 @@
     margin-left: 5px;
 }
 </style>
-		<form action="productUpdate" method="post">
+		<form action="productUpdate" method="post" id="updateForm">
 		<input type="hidden" name="productNo" value="${productDto.productNo}">
 	<div class="container-700">
 		<div class="row center">
@@ -47,9 +47,13 @@
 		</div>
 		<div class="row center">
 			<a class="form-btn neutral2" href="/admin/productManage">목록으로</a>
-			<button class="form-btn positive" type="submit">수정완료</button>
+			<button class="form-btn positive" id="updateBtn">수정완료</button>
+			<button class="form-btn negative" id="deleteBtn">삭 제</button>
 		</div>
 	</div>
+		</form>
+		<form id="moveForm" action="/admin/productDetail" method="get">
+			<input type="hidden" name="productNo" value="${productDto.productNo}">
 		</form>
 	
 	<script>
@@ -150,8 +154,34 @@
 				}
 			});
 			
+		
+			
 			
 		});
+		
+		/* 수정 버튼 */
+		$("#updateBtn").click(function(e){
+			e.preventDefault();
+			$("#updateForm").submit();
+			
+		});
+		
+		
+		/* 삭제 버튼 */
+		$("#deleteBtn").click(function(e){
+			e.preventDefault();
+			let moveForm = $("#moveForm");
+			moveForm.find("input").remove();
+			moveForm.append('<input type="hidden" name="productNo" value="${productDto.productNo}">');
+			moveForm.attr("action","/admin/productDelete");
+			moveForm.attr("method","post");
+			
+			moveForm.submit();
+			
+		});
+		
+		
+		
 		
 		
 		
