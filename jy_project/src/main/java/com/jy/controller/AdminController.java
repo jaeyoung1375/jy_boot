@@ -6,7 +6,10 @@ package com.jy.controller;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +17,9 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jy.model.cateVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jy.model.AttachImageVO;
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
 import com.jy.model.ProductDTO;
@@ -165,9 +172,21 @@ public class AdminController {
 	}
 	
 	// 첨부파일 업로드
-	@PostMapping("/uploadAjaxAction")
-	public void uploadAjaxAction(MultipartFile[] uploadFile) {
+	@PostMapping(value="/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<AttachImageVO>> uploadAjaxAction(MultipartFile[] uploadFile) throws IOException {
 		log.info("uploadAjaxAction .. ");
+		/* 이미지 파일 체크 */
+		for(MultipartFile multipartFile : uploadFile) {
+			File checkFile = new File(multipartFile.getOriginalFilename());
+			String type = null;
+			type = Files.probeContentType(checkFile.toPath());
+			log.info("MIME TYPE : "+type);
+			if(!type.startsWith("image")) {
+				List<AttachImageVO> list = null;
+				return new ResponseEntity<>(list,HttpStatus.BAD_REQUEST);
+			}
+		}
+		 
 		String uploadFolder = "C:\\upload";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
@@ -179,13 +198,22 @@ public class AdminController {
 			uploadPath.mkdirs();
 		}
 		
+		/* 이미지 정보를 담는 객체 */
+		List<AttachImageVO> list = new ArrayList<AttachImageVO>();
+		
 		for(MultipartFile multipartFile : uploadFile) {
+			// 이미지 정보 객체
+			AttachImageVO vo = new AttachImageVO();
+			
 			/* 파일 이름 */
 			String uploadFileName = multipartFile.getOriginalFilename();
+			vo.setFileName(uploadFileName);
+			vo.setUploadPath(datePath);
 			
 			/* UUID 적용 파일 이름 */
 			String uuid = UUID.randomUUID().toString();
 			uploadFileName = uuid +"_" + uploadFileName;
+			vo.setUuid(uuid);
 			
 			/* 파일 위치, 파일 이름을 합친 File 객체 */
 			File saveFile = new File(uploadPath,uploadFileName);
@@ -213,9 +241,12 @@ public class AdminController {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+			list.add(vo);
 		}
 			
+		ResponseEntity<List<AttachImageVO>> result = new ResponseEntity<List<AttachImageVO>>(list,HttpStatus.OK);
 		
+		return result;
 	}
 	
 	

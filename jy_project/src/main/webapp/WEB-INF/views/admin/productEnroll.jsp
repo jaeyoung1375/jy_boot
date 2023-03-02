@@ -278,10 +278,10 @@ select{
 		let fileInput = $("input[name='uploadFile']");
 		let fileList = fileInput[0].files;
 		let fileObj = fileList[0];
-		
+		/*
 		if(!fileCheck(fileObj.name, fileObj.size)){
 			return false;
-		}
+		}*/
 		
 		for(let i = 0; i<fileList.length; i++){
 			formData.append("uploadFile",fileList[i]);
@@ -294,7 +294,13 @@ select{
 			contentType : false, // 서버로 전송되는 데이터의 content-type
 			data : formData, // 서버로 전송할 데이터
 			type : "POST",  // 서버 요청 타입
-			dataType : "json" // 서버로부터 반환받을 데이터 타입
+			dataType : "json", // 서버로부터 반환받을 데이터 타입
+			success : function(result){
+					console.log(result);
+			},
+			error : function(result){
+				alert("이미지 파일이 아닙니다.");
+			}
 		});
 	});
 	
