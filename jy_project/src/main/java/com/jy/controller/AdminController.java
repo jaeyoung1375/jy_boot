@@ -42,6 +42,8 @@ import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
 import com.jy.model.ProductDTO;
 import com.jy.service.AdminService;
+import com.jy.service.AttachService;
+
 import lombok.extern.log4j.Log4j2;
 
 
@@ -52,6 +54,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private AttachService attachService;
 	
 	@GetMapping("/main")
 	public String main() {
@@ -293,6 +298,13 @@ public class AdminController {
 		}
 		
 		return new ResponseEntity<String>("success",HttpStatus.OK);
+	}
+	
+	/* 이미지 정보 반환 */
+	@GetMapping(value ="/getAttachList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<AttachImageVO>> getAttachList(int productNo){
+		
+		return new ResponseEntity<List<AttachImageVO>>(attachService.getAttachList(productNo), HttpStatus.OK);
 	}
 	
 	

@@ -14,6 +14,15 @@
     text-align-last: center;
     margin-left: 5px;
 }
+
+#result_card img{
+		max-width: 100%;
+	    height: auto;
+	    display: block;
+	    padding: 5px;
+	    margin-top: 10px;
+	    margin: auto;	
+	}
 </style>
 
 	<div class="container-700">
@@ -43,6 +52,12 @@
 		<select class="cate2" disabled>
 			<option selected value="none">선택</option>
 		</select>
+		</div>
+		<div class="row">
+		<label>상품 이미지</label><br>
+		<div id="uploadResult">
+		
+		</div>
 		</div>
 		<div class="row center">
 			<a class="form-btn neutral2" href="/admin/productManage">목록으로</a>
@@ -110,6 +125,36 @@
 				}
 			});
 			
+			/* 이미지 정보 호출 */
+			let productNo = '<c:out value="${productDto.productNo}"/>';
+			let uploadReslut = $("#uploadResult");			
+			
+			$.getJSON("/admin/getAttachList", {productNo : productNo}, function(arr){	
+				
+				if(arr.length === 0){
+					let str = "";
+					str += "<div id='result_card'>";
+					str += "<img src='/css/img/NoImage.png'>";
+					str += "</div>";
+					
+					uploadReslut.html(str);	
+				}
+				
+				let str = "";
+				let obj = arr[0];	
+				
+				let fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+				str += "<div id='result_card'";
+				str += "data-path='" + obj.uploadPath + "' data-uuid='" + obj.uuid + "' data-filename='" + obj.fileName + "'";
+				str += ">";
+				str += "<img src='/admin/display?fileName=" + fileCallPath +"'>";
+				str += "</div>";		
+				
+				uploadReslut.html(str);						
+				
+			});	
+			
+			
 			// 대분류
 			for(let i = 0; i<cate1Array.length; i++){
 				if(targetCate2.cateParent === cate1Array[i].cateCode){
@@ -138,6 +183,8 @@
 				alert("수정 완료");
 			}
 			
+			
+		
 			
 		});
 		

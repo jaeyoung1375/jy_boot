@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jy.mapper.AdminMapper;
 import com.jy.model.cateVO;
@@ -55,6 +56,7 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.productSelectOne(productNo);
 	}
 
+	@Transactional
 	@Override
 	public void productEnroll(ProductDTO dto) {
 		adminMapper.productEnroll(dto);

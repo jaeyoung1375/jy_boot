@@ -81,6 +81,8 @@
   	insert into product_image(product_no, fileName, uploadPath, uuid) values (#{productNo}, #{fileName}, #{uploadPath}, #{uuid})
   </insert>
   
+ 
+  
   	
 
   

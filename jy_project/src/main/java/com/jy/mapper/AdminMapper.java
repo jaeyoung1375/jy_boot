@@ -50,5 +50,7 @@ public interface AdminMapper {
 	public void imageEnroll(AttachImageVO vo);
 	
 	
+	
+	
 
 }

@@ -36,11 +36,11 @@ public class serviceTests {
 		
 		image1.setFileName("test Image1");
 		image1.setUploadPath("test image1");
-		image1.setUuid("test 11");
+		image1.setUuid("test 111");
 		
-		image2.setFileName("test Image2");
+		image2.setFileName("test Imagasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasasase2");
 		image2.setUploadPath("test image2");
-		image2.setUuid("test 22");
+		image2.setUuid("test 221");
 		
 		imageList.add(image1);
 		imageList.add(image2);

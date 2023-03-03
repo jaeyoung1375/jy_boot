@@ -1,0 +1,11 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.jy.mapper.AttachMapper">
+	
+	 <!-- 이미지 상세정보 반환 -->
+  <select id="getAttachList" resultType="com.jy.model.AttachImageVO">
+  	select * from product_image where product_no = #{productNo}
+  </select>
+
+  </mapper>
