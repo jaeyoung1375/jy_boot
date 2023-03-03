@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jy.mapper.AdminMapper;
 import com.jy.model.cateVO;
+import com.jy.model.AttachImageVO;
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
 import com.jy.model.ProductDTO;
@@ -57,6 +58,15 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void productEnroll(ProductDTO dto) {
 		adminMapper.productEnroll(dto);
+		// 이미지를 첨부하지 않는 경우 return
+		if(dto.getImageList() == null || dto.getImageList().size() <= 0) {
+			return;
+		}
+		// List의 각 요소를 하나씩 넘겨주기 위함
+		for(AttachImageVO attach : dto.getImageList()) {
+			attach.setProductNo(dto.getProductNo());
+			adminMapper.imageEnroll(attach);
+		}
 	}
 
 	@Override

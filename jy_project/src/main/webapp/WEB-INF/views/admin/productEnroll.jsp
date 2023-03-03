@@ -31,6 +31,35 @@ select{
     padding-top: 5px;
     font-weight: 500;
 }
+#result_card img{
+		max-width: 100%;
+	    height: auto;
+	    display: block;
+	    padding: 5px;
+	    margin-top: 10px;
+	    margin: auto;	
+	}
+	#result_card {
+		position: relative;
+	}
+	.imgDeleteBtn{
+	    position: absolute;
+	    top: 0;
+	    right: 5%;
+	    background-color: #ef7d7d;
+	    color: wheat;
+	    font-weight: 900;
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 50%;
+	    line-height: 26px;
+	    text-align: center;
+	    border: none;
+	    display: block;
+	    cursor: pointer;	
+	}
+
+
 </style>
   
   
@@ -80,8 +109,12 @@ select{
 		<span class="ck_warn productCateCode_warn">카테고리를 입력해주세요.</span>
 	</div>
 	<div class="row">
-		<label>상품 이미지</label>
+		<label>상품 이미지</label><br>
 		<input type="file" name="uploadFile" class="form-input" multiple>
+		<div id="uploadResult">
+			
+			
+		</div>
 	</div>
 	<div class="row right">
 		<button class="form-btn positive" id="enrollBtn">등록</button>
@@ -273,6 +306,11 @@ select{
 	/* 이미지 업로드 */
 	$("input[type='file']").on("change",function(e){
 		
+		/* 이미지 존재 시 삭제 */
+		if($(".imgDeleteBtn").length > 0){
+			deleteFile();
+		}
+		
 		let formData = new FormData();
 		
 		let fileInput = $("input[name='uploadFile']");
@@ -297,6 +335,7 @@ select{
 			dataType : "json", // 서버로부터 반환받을 데이터 타입
 			success : function(result){
 					console.log(result);
+					showUploadImage(result);
 			},
 			error : function(result){
 				alert("이미지 파일이 아닙니다.");
@@ -319,6 +358,62 @@ select{
 		}
 		return true;
 	}
+	
+	/* 이미지 출력 */
+	function showUploadImage(uploadResultArr){
+		
+		/* 전달받은 데이터 검증 */
+		if(!uploadResultArr || uploadResultArr.length == 0){return}
+		
+		let uploadResult = $("#uploadResult");
+		
+		let obj = uploadResultArr[0];
+		
+		let str = "";
+		
+		let fileCallPath = obj.uploadPath.replace(/\\/g, '/') + "/s_" + obj.uuid + "_" + obj.fileName;
+		
+		str += "<div id='result_card'>";
+		str += "<img src='/admin/display?fileName=" + fileCallPath +"'>";
+		str += "<div class='imgDeleteBtn' data-file='" + fileCallPath + "'>x</div>";
+		str += "<input type='hidden' name='imageList[0].fileName' value='"+ obj.fileName +"'>";
+		str += "<input type='hidden' name='imageList[0].uuid' value='"+ obj.uuid +"'>";
+		str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";	
+		str += "</div>";		
+		
+   		uploadResult.append(str);     
+	}
+	
+	/* 파일 삭제 메서드 */
+	function deleteFile(){
+		
+		let targetFile = $(".imgDeleteBtn").data("file");
+		let targetDiv = $("#result_card");
+		
+		$.ajax({
+			url : "/admin/deleteFile",
+			data : {fileName : targetFile},
+			dataType : "text",
+			type : "POST",
+			success : function(result){
+					console.log(result);
+					
+					targetDiv.remove();
+					$("input[type='file']").val("");
+			},
+			error : function(result){
+					console.log(result);
+					
+					alert("파일을 삭제하지 못하였습니다.");
+			}
+		});
+	}
+	
+	/* 이미지 삭제 버튼 동작 */
+	$("#uploadResult").on("click",".imgDeleteBtn", function(e){
+		deleteFile();
+	});
+	
 
 	
 	

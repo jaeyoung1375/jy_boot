@@ -43,6 +43,11 @@
   
   	<!-- 상품 등록 -->
   <insert id="productEnroll">
+  	
+  	<selectKey resultType="int" keyProperty="productNo" order="AFTER">
+  		select max(product_no) from product
+  	</selectKey>
+  
   	insert into product(product_no, product_name, product_price, product_discount, product_stock, product_description, product_cateCode)
   	values(product_seq.nextval, #{productName}, #{productPrice}, #{productDiscount}, #{productStock}, #{productDescription}, #{productCateCode})
   </insert>
@@ -70,6 +75,11 @@
   	
   	select product_seq.nextval from dual
   </select>
+  
+  <!-- 이미지 등록 -->
+  <insert id="imageEnroll">
+  	insert into product_image(product_no, fileName, uploadPath, uuid) values (#{productNo}, #{fileName}, #{uploadPath}, #{uuid})
+  </insert>
   
   	
 

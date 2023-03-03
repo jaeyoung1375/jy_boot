@@ -5,9 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.jy.model.cateVO;
+import com.jy.model.AttachImageVO;
 import com.jy.model.MemberVO;
 import com.jy.model.PaginationVO;
 import com.jy.model.ProductDTO;
+import com.jy.model.ProductImageDto;
 @Mapper
 public interface AdminMapper {
 	
@@ -43,6 +45,9 @@ public interface AdminMapper {
 	
 	/* 시퀀스 구하기 */
 	public int sequence();
+	
+	/* 이미지 등록 */
+	public void imageEnroll(AttachImageVO vo);
 	
 	
 
