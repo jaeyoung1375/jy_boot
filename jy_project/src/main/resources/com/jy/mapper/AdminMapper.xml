@@ -81,6 +81,11 @@
   	insert into product_image(product_no, fileName, uploadPath, uuid) values (#{productNo}, #{fileName}, #{uploadPath}, #{uuid})
   </insert>
   
+  <!-- 지정 상품 이미지 전체 삭제 -->
+  <delete id="deleteImageAll">
+  	delete from product_image where product_No = #{productNo}
+  </delete>
+  
  
   
   	

@@ -35,6 +35,9 @@
     	     </c:if>
 			<label><input type="checkbox" name="rememberId" ${empty cookie.id.value ? "" : "checked"}> 아이디 기억</label>
 			 <input type="button" class="btn" id="login_button" value="L O G I N"/>
+				<br>
+				<a href="https://kauth.kakao.com/oauth/authorize?client_id=1b308937b1aec37f7b4bc57faeb4931b&redirect_uri=	
+http://localhost:8080/member/auth/kakao/callback&response_type=code"><img src="/img/kakaoLogin.png"></a>
 			</form>
 		</div>
 		

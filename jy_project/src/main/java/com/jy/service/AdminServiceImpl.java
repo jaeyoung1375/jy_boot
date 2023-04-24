@@ -76,11 +76,23 @@ public class AdminServiceImpl implements AdminService{
 		
 		return adminMapper.cateList();
 	}
-
+	@Transactional
 	@Override
 	public int productUpdate(ProductDTO dto) {
 		
-		return adminMapper.productUpdate(dto);
+		int result = adminMapper.productUpdate(dto);
+		
+		if(result == 1 && dto.getImageList() != null && dto.getImageList().size() > 0) { // 수정 성공
+			adminMapper.deleteImageAll(dto.getProductNo());
+			
+			dto.getImageList().forEach(attach -> {
+				
+				attach.setProductNo(dto.getProductNo());
+				adminMapper.imageEnroll(attach);
+			});
+		}
+		
+		return result;
 	}
 
 	@Override

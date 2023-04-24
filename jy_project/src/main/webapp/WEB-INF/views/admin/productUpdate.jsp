@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file ="../include/admin/header.jsp"%>
 <script
   src="https://code.jquery.com/jquery-3.4.1.js"
@@ -14,6 +16,34 @@
     text-align-last: center;
     margin-left: 5px;
 }
+
+#result_card img{
+		max-width: 100%;
+	    height: auto;
+	    display: block;
+	    padding: 5px;
+	    margin-top: 10px;
+	    margin: auto;	
+	}
+	#result_card {
+		position: relative;
+	}
+	.imgDeleteBtn{
+	    position: absolute;
+	    top: 0;
+	    right: 5%;
+	    background-color: #ef7d7d;
+	    color: wheat;
+	    font-weight: 900;
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 50%;
+	    line-height: 26px;
+	    text-align: center;
+	    border: none;
+	    display: block;
+	    cursor: pointer;	
+	}
 </style>
 		<form action="productUpdate" method="post" id="updateForm">
 		<input type="hidden" name="productNo" value="${productDto.productNo}">
@@ -44,6 +74,15 @@
 		<select class="cate2" name="productCateCode">
 			<option selected value="none">선택</option>
 		</select>
+		</div>
+		<div class="row">
+			<label>상품 이미지</label>
+		</div>
+		<div class="row">
+			<input type="file" id="fileItem" name="uploadFile" style="height:30px;">
+			<div id="uploadResult">
+			
+			</div>
 		</div>
 		<div class="row center">
 			<a class="form-btn neutral2" href="/admin/productManage">목록으로</a>
@@ -153,6 +192,133 @@
 					$(obj).attr("selected","selected");
 				}
 			});
+			
+			
+			/* 기존 이미지 정보 호출 */
+			let productNo = '<c:out value="${productDto.productNo}"/>';
+			let uploadReslut = $("#uploadResult");			
+			
+			$.getJSON("/admin/getAttachList", {productNo : productNo}, function(arr){	
+				
+				if(arr.length === 0){
+					let str = "";
+					str += "<div id='result_card'>";
+					str += "<img src='/css/img/NoImage.png'>";
+					str += "</div>";
+					
+					uploadReslut.html(str);
+					return;
+				}
+				
+				let str = "";
+				let obj = arr[0];	
+				
+				let fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+				str += "<div id='result_card'";
+				str += "data-path='" + obj.uploadPath + "' data-uuid='" + obj.uuid + "' data-filename='" + obj.fileName + "'";
+				str += ">";
+				str += "<img src='/admin/display?fileName=" + fileCallPath +"'>";
+				str += "<div class='imgDeleteBtn' data-file='" + fileCallPath + "'>x</div>";
+				str += "<input type='hidden' name='imageList[0].fileName' value='"+ obj.fileName +"'>";
+				str += "<input type='hidden' name='imageList[0].uuid' value='"+ obj.uuid +"'>";
+				str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";
+				str += "</div>";		
+				
+				uploadReslut.html(str);						
+				
+			});	
+			
+			/* 파일 삭제 메서드 */
+			function deleteFile(){
+				
+				$("#result_card").remove();
+			}
+			
+			/* 이미지 삭제 버튼 동작 */
+			$("#uploadResult").on("click",".imgDeleteBtn", function(e){
+				deleteFile();
+			});
+			
+			/* 이미지 업로드 */
+			$("input[type='file']").on("change",function(e){
+				
+				/* 이미지 존재 시 삭제 */
+				if($("#result_card").length > 0){
+					deleteFile();
+				}
+				
+				let formData = new FormData();
+				
+				let fileInput = $("input[name='uploadFile']");
+				let fileList = fileInput[0].files;
+				let fileObj = fileList[0];
+				/*
+				if(!fileCheck(fileObj.name, fileObj.size)){
+					return false;
+				}*/
+				
+				for(let i = 0; i<fileList.length; i++){
+					formData.append("uploadFile",fileList[i]);
+				}
+				
+				
+				$.ajax({
+					url: "/admin/uploadAjaxAction",
+					processData : false, // 서버로 전송할 데이터를 쿼리스트링 형태로 변환할지 여부
+					contentType : false, // 서버로 전송되는 데이터의 content-type
+					data : formData, // 서버로 전송할 데이터
+					type : "POST",  // 서버 요청 타입
+					dataType : "json", // 서버로부터 반환받을 데이터 타입
+					success : function(result){
+							console.log(result);
+							showUploadImage(result);
+					},
+					error : function(result){
+						alert("이미지 파일이 아닙니다.");
+					}
+				});
+			});
+			
+			let regex = new RegExp("(.*?)\.(jpg|png)$");
+			let maxSize = 1048576; // 1MB
+			
+			function fileCheck(fileName, fileSize){
+				
+				if(fileSize >= maxSize){
+					alert("파일 사이즈 초과");
+					return false;
+				}
+				if(!regex.test(fileName)){
+					alert("해당 종류의 파일은 업로드할 수 없습니다.");
+					return false;
+				}
+				return true;
+			}
+			
+			/* 이미지 출력 */
+			function showUploadImage(uploadResultArr){
+				
+				/* 전달받은 데이터 검증 */
+				if(!uploadResultArr || uploadResultArr.length == 0){return}
+				
+				let uploadResult = $("#uploadResult");
+				
+				let obj = uploadResultArr[0];
+				
+				let str = "";
+				
+				let fileCallPath = obj.uploadPath.replace(/\\/g, '/') + "/s_" + obj.uuid + "_" + obj.fileName;
+				
+				str += "<div id='result_card'>";
+				str += "<img src='/admin/display?fileName=" + fileCallPath +"'>";
+				str += "<div class='imgDeleteBtn' data-file='" + fileCallPath + "'>x</div>";
+				str += "<input type='hidden' name='imageList[0].fileName' value='"+ obj.fileName +"'>";
+				str += "<input type='hidden' name='imageList[0].uuid' value='"+ obj.uuid +"'>";
+				str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";	
+				str += "</div>";		
+				
+		   		uploadResult.append(str);     
+			}
 			
 		
 			
