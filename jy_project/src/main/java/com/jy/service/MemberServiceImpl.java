@@ -1,6 +1,7 @@
 package com.jy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.jy.mapper.MemberMapper;
@@ -13,8 +14,11 @@ public class MemberServiceImpl implements MemberService{
 	private MemberMapper memberMapper;
 
 	
+	
 	// 회원가입
 	public void memberJoin(MemberVO member) {
+		
+		
 		
 		memberMapper.memberJoin(member);	
 	}

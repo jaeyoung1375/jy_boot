@@ -1,12 +1,19 @@
 package com.jy.controller;
 
+import java.net.http.HttpRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+
+
+import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,9 +26,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +36,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.jy.model.KakaoProfile;
 import com.jy.model.MemberVO;
 import com.jy.model.OAuthToken;
@@ -38,16 +43,28 @@ import com.jy.service.MemberService;
 
 import lombok.extern.log4j.Log4j2;
 
+// 인증이 안된 사용자들이 출입할 수 있는 경로를 /auth/** 허용
+// 그냥 주소가 /이면 index.jsp 허용
+// static 이하에 있는 /js/**, /css/**, /image/**
+
 @Controller
 @Log4j2
 @RequestMapping("/member")
 public class MemberController {
+	
+	
+	@Value("${cos.key}")
+	private String cosKey;
+	
 	
 	@Autowired
 	private MemberService memberService;
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	
+	
 	
 	// 로그인 페이지 이동
 	@GetMapping("/login")
@@ -76,10 +93,9 @@ public class MemberController {
 	}
 	
 	@GetMapping("/logout")
-	public String logout(HttpServletRequest request) {
+	public String logout(HttpServletRequest request, HttpSession session) {
 		
-		HttpSession session = request.getSession();
-		session.invalidate();
+		session.removeAttribute("member");
 		log.info("로그아웃 성공 ! ");
 		
 		
@@ -98,6 +114,8 @@ public class MemberController {
 	// 회원가입 기능
 	@PostMapping("/join")
 	public String joinPOST(@ModelAttribute MemberVO member) {
+		
+		
 		
 		memberService.memberJoin(member);
 		
@@ -208,7 +226,7 @@ public class MemberController {
 	}
 	
 	@GetMapping("/auth/kakao/callback")
-	public @ResponseBody String kakaoCallback(String code) { // Data를 리턴해주는 컨트롤러 함수
+	public String kakaoCallback(String code,HttpSession session) { // Data를 리턴해주는 컨트롤러 함수
 		
 		// POST 방식으로 key=value 데이터를 요청(카카오쪽으로)
 		RestTemplate rt = new RestTemplate();
@@ -241,8 +259,8 @@ public class MemberController {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("카카오 엑세스 토큰 : "+oAuthToken.getAccess_token());
+		String access_token = oAuthToken.getAccess_token();
+		System.out.println("카카오 엑세스 토큰 : "+access_token);
 		
 		
 		RestTemplate rt2 = new RestTemplate();
@@ -272,17 +290,47 @@ public class MemberController {
 			e.printStackTrace();
 		}
 		
+		// username,password,email
 		System.out.println("카카오 아이디  : " +kakaoProfile.getId());
 		System.out.println("카카오 이메일  : " +kakaoProfile.getKakao_account().getEmail());
 		
-		return response2.getBody();
+		System.out.println("블로그서버 유저네임 : "+kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
+		System.out.println("블로그서버 이메일  : " +kakaoProfile.getKakao_account().getEmail());
+		System.out.println("블로그 서버 패스워드 : "+cosKey);
+		
+		MemberVO kakaoUser = new MemberVO();
+		kakaoUser.setMemberName(kakaoProfile.getKakao_account().getEmail());
+		kakaoUser.setMemberPw(cosKey);
+		kakaoUser.setMemberId(kakaoProfile.getKakao_account().getEmail());
+		kakaoUser.setMemberNickName(kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
+		kakaoUser.setMemberEmail(kakaoProfile.getKakao_account().getEmail());
+		// 가입자 혹은 비가입자 체크해서 처리
+		MemberVO originMember = memberService.selectOne(kakaoUser.getMemberName());
+		
+		if(originMember == null) {
+			System.out.println("기존 회원이 아니므로 자동 회원가입을 진행합니다.");
+			memberService.memberJoin(kakaoUser);
+		}
+		System.out.println("자동 로그인을 진행합니다.");
+		session.setAttribute("member", access_token);
+		return "redirect:/";
+	}
+	
+	@GetMapping("/v1/user/logout")
+	public String kakaoLogout(HttpSession session) {
+		
+		session.removeAttribute("member");
+		
+		
+			
+		return "redirect:/";
 	}
 	
 	
 	
 	
 	
-	
+		
 	
 
 }

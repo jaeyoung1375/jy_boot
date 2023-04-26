@@ -172,14 +172,14 @@
 					
 					
 					
-					if(idCheck&&idckCheck&&pwCheck&&pwckCheck&&nickNameCheck&&emailCheck&&emailckCheck){
-					$("#join_form").attr("action","join");
+				//	if(idCheck&&idckCheck&&pwCheck&&pwckCheck&&nickNameCheck&&emailCheck&&emailckCheck){
+					$("#join_form").attr("action","/member/join");
 					$("#join_form").submit();
-				}
+			//	}
 					
-					return false;
+				//	return false;
 				});
-			});
+		
 			
 			
 			/* 이메일 컬럼 합치기 */
@@ -336,7 +336,7 @@
 					$('.open_expand').css('display','block');
 				$.ajax({
 					type: "GET",
-					url : "mailCheck?email="+email,
+					url : "/mailCheck?email="+email,
 					success : function(data){
 					console.log("data : " +data);
 					code = data;
@@ -383,7 +383,7 @@
 		});
 		
 			
-			
+			});		
 		
 		</script>
 	
