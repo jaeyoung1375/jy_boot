@@ -37,7 +37,12 @@
 			 <input type="button" class="btn" id="login_button" value="L O G I N"/>
 				<br>
 				<a href="https://kauth.kakao.com/oauth/authorize?client_id=1b308937b1aec37f7b4bc57faeb4931b&redirect_uri=	
-http://localhost:8080/member/auth/kakao/callback&response_type=code"><img src="/img/kakaoLogin.png"></a>
+http://localhost:8080/member/auth/kakao/callback&response_type=code&scope=account_email,gender,age_range&prompt=login"><img src="/img/kakaoLogin.png"></a>
+				<br>
+				<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=197694978566-bljc0eo7lnf071parv36ntrenp3g69eb.apps.googleusercontent.com&
+				redirect_uri=http://localhost:8080/member/login/oauth_google_check&response_type=code
+&scope=email%20profile%20openid
+&access_type=offline&prompt=login">구글 로그인</a>
 			</form>
 		</div>
 		

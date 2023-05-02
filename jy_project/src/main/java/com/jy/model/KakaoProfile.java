@@ -33,6 +33,15 @@ public class KakaoAccount {
 	public Boolean is_email_valid;
 	public Boolean is_email_verified;
 	public String email;
+	public String age_range;
+	private String gender;
+	
+
+	
+
+
+
+
 	@Data
 	@JsonIgnoreProperties(ignoreUnknown=true)
 	public class Profile {

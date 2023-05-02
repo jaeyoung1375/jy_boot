@@ -1,5 +1,8 @@
 package com.jy.controller;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +12,9 @@ import java.util.Random;
 import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -36,11 +42,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jy.model.GoogleInfResponse;
+import com.jy.model.GoogleOAuthRequest;
+import com.jy.model.GoogleRequest;
+import com.jy.model.GoogleResponse;
 import com.jy.model.KakaoProfile;
 import com.jy.model.MemberVO;
 import com.jy.model.OAuthToken;
 import com.jy.service.MemberService;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import lombok.extern.log4j.Log4j2;
 
 // 인증이 안된 사용자들이 출입할 수 있는 경로를 /auth/** 허용
@@ -62,7 +73,7 @@ public class MemberController {
 	
 	@Autowired
 	private JavaMailSender mailSender;
-	
+
 	
 	
 	
@@ -252,6 +263,7 @@ public class MemberController {
 												String.class);
 		ObjectMapper objectMapper = new ObjectMapper();
 		OAuthToken oAuthToken = null;
+		
 		try {
 			oAuthToken = objectMapper.readValue(response.getBody(),OAuthToken.class);
 		} catch (JsonMappingException e) {
@@ -261,6 +273,7 @@ public class MemberController {
 		}
 		String access_token = oAuthToken.getAccess_token();
 		System.out.println("카카오 엑세스 토큰 : "+access_token);
+		
 		
 		
 		RestTemplate rt2 = new RestTemplate();
@@ -294,10 +307,16 @@ public class MemberController {
 		System.out.println("카카오 아이디  : " +kakaoProfile.getId());
 		System.out.println("카카오 이메일  : " +kakaoProfile.getKakao_account().getEmail());
 		
+		if(kakaoProfile.getKakao_account().getGender().equals("male")) {
+			kakaoProfile.getKakao_account().setGender("남성");
+		}
+		
+		System.out.println("성별 : " + kakaoProfile.getKakao_account().getGender());
+		System.out.println("성별 : " + kakaoProfile.getKakao_account().getAge_range());
+		
 		System.out.println("블로그서버 유저네임 : "+kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
 		System.out.println("블로그서버 이메일  : " +kakaoProfile.getKakao_account().getEmail());
 		System.out.println("블로그 서버 패스워드 : "+cosKey);
-		
 		MemberVO kakaoUser = new MemberVO();
 		kakaoUser.setMemberName(kakaoProfile.getKakao_account().getEmail());
 		kakaoUser.setMemberPw(cosKey);
@@ -313,24 +332,120 @@ public class MemberController {
 		}
 		System.out.println("자동 로그인을 진행합니다.");
 		session.setAttribute("member", access_token);
+		session.setAttribute("refresh_token", oAuthToken.getRefresh_token());
 		return "redirect:/";
 	}
 	
 	@GetMapping("/v1/user/logout")
-	public String kakaoLogout(HttpSession session) {
+	public String kakaoLogout(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+	    String access_token = (String) session.getAttribute("member");
+	    String refresh_token = (String) session.getAttribute("refresh_token");
+	    
+	    try {
+	        // send a request to the logout API endpoint
+	        String logoutUrl = "https://kapi.kakao.com/v1/user/logout";
+	        URL url = new URL(logoutUrl);
+	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.setRequestProperty("Authorization", "Bearer " + access_token);
+	        int responseCode = conn.getResponseCode();
+	        System.out.println("Response Code : " + responseCode);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    // remove tokens from session and cookies
+	    session.removeAttribute("member");    
+	    session.removeAttribute("refresh_token");
+
+	    
+	  
+
+	    return "redirect:/";
+	}
+	
+	@GetMapping("/login/oauth_google_check")
+	public String googleLoign(HttpServletRequest request, @RequestParam(value = "code") String authCode,
+			HttpSession session){
 		
-		session.removeAttribute("member");
+		RestTemplate rt = new RestTemplate();
+		
+		// HttpBody 오브젝트 생성
+		 GoogleRequest googleOAuthRequestParam = GoogleRequest
+	                .builder()
+	                .clientId("197694978566-bljc0eo7lnf071parv36ntrenp3g69eb.apps.googleusercontent.com")
+	                .clientSecret("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")
+	                .code(authCode)
+	                .redirectUri("http://localhost:8080/member/login/oauth_google_check")
+	                .grantType("authorization_code").build();
+		 
+		
+		 
+		
+		 ResponseEntity<GoogleResponse> resultEntity = rt.postForEntity("https://oauth2.googleapis.com/token",
+	                googleOAuthRequestParam, GoogleResponse.class);
+		 
+		
+		 
+		 
 		
 		
-			
-		return "redirect:/";
+		 String jwtToken=resultEntity.getBody().getId_token();
+	        Map<String, String> map=new HashMap<>();
+	        map.put("id_token",jwtToken);
+	        ResponseEntity<GoogleInfResponse> resultEntity2 = rt.postForEntity("https://oauth2.googleapis.com/tokeninfo",
+	                map, GoogleInfResponse.class);
+	        
+	      
+	    
+	        
+	        
+	        System.out.println("엑세스 토큰 : "+resultEntity.getBody().getAccess_token());
+	        System.out.println("아이디 토큰 : "+resultEntity.getBody().getId_token());
+	        System.out.println("리프레시 토큰 : "+resultEntity.getBody().getRefresh_token());
+	        String email=resultEntity2.getBody().getEmail();  
+	        String name = resultEntity2.getBody().getName();
+	        System.out.println("이메일 : "+email);
+	        System.out.println("이름 : "+name);
+	      
+	        
+	        MemberVO googleUser = new MemberVO();
+	        googleUser.setMemberName(name);
+	        googleUser.setMemberEmail(email);
+	        googleUser.setMemberId(email);
+	        googleUser.setMemberPw(cosKey);
+	        googleUser.setMemberNickName(email);
+	        
+	        // 가입자 혹은 비가입자 체크해서 처리
+	        MemberVO originMember = memberService.selectOne(googleUser.getMemberName());
+	        
+	        if(originMember == null) {
+	        	System.out.println("기존 회원이 아니므로 자동 회원가입을 진행합니다");
+	        	memberService.memberJoin(googleUser);
+	        }
+	        System.out.println("자동 로그인을 진행합니다.");
+	        session.setAttribute("member",resultEntity.getBody().getAccess_token());
+	        session.setAttribute("refresh_token", resultEntity.getBody().getRefresh_token());
+	       
+	        
+	      
+	      
+	        
+	        return "redirect:/";
+		
+		
+		
+		
+		
+		
+	
+		
+		
 	}
 	
 	
 	
 	
-	
 		
-	
-
 }
+
