@@ -2,6 +2,7 @@ package com.jy.controller;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpRequest;
 import java.util.HashMap;
@@ -42,6 +43,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jy.model.FacebookProfile;
+import com.jy.model.FacekbookResponse;
 import com.jy.model.GoogleInfResponse;
 import com.jy.model.GoogleOAuthRequest;
 import com.jy.model.GoogleRequest;
@@ -237,102 +240,39 @@ public class MemberController {
 	}
 	
 	@GetMapping("/auth/kakao/callback")
-	public String kakaoCallback(String code,HttpSession session) { // Data를 리턴해주는 컨트롤러 함수
-		
-		// POST 방식으로 key=value 데이터를 요청(카카오쪽으로)
-		RestTemplate rt = new RestTemplate();
-		
-		// HttpHeader 오브젝트 생성
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-		
-		// HttpBody 오브젝트 생성
-		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-		params.add("grant_type", "authorization_code");
-		params.add("client_id", "1b308937b1aec37f7b4bc57faeb4931b");
-		params.add("redirect_uri", "http://localhost:8080/member/auth/kakao/callback");
-		params.add("code", code);
-		
-		// HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params,headers);
-		
-		// Http 요청하기 - Post방식으로 - 그리고 response의 변수의 응답 받음
-		ResponseEntity<String> response = rt.exchange("https://kauth.kakao.com/oauth/token",
-												HttpMethod.POST,
-												kakaoTokenRequest,
-												String.class);
-		ObjectMapper objectMapper = new ObjectMapper();
-		OAuthToken oAuthToken = null;
-		
-		try {
-			oAuthToken = objectMapper.readValue(response.getBody(),OAuthToken.class);
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		String access_token = oAuthToken.getAccess_token();
-		System.out.println("카카오 엑세스 토큰 : "+access_token);
-		
-		
-		
-		RestTemplate rt2 = new RestTemplate();
-		
-		// HttpHeader 오브젝트 생성
-		HttpHeaders headers2 = new HttpHeaders();
-		headers2.add("Authorization","Bearer "+oAuthToken.getAccess_token());
-		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-		
-		
-		// HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-		HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 = new HttpEntity<>(headers2);
-		
-		// Http 요청하기 - Post방식으로 - 그리고 response의 변수의 응답 받음
-		ResponseEntity<String> response2 = rt2.exchange("https://kapi.kakao.com/v2/user/me",
-												HttpMethod.POST,
-												kakaoProfileRequest2,
-												String.class);
-		
-		ObjectMapper objectMapper2 = new ObjectMapper();
-		KakaoProfile kakaoProfile = null;
-		try {
-			kakaoProfile = objectMapper2.readValue(response2.getBody(),KakaoProfile.class);
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		
-		// username,password,email
-		System.out.println("카카오 아이디  : " +kakaoProfile.getId());
-		System.out.println("카카오 이메일  : " +kakaoProfile.getKakao_account().getEmail());
-		
-		if(kakaoProfile.getKakao_account().getGender().equals("male")) {
-			kakaoProfile.getKakao_account().setGender("남성");
-		}
-		
-		System.out.println("성별 : " + kakaoProfile.getKakao_account().getGender());
-		System.out.println("성별 : " + kakaoProfile.getKakao_account().getAge_range());
-		
-		System.out.println("블로그서버 유저네임 : "+kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
-		System.out.println("블로그서버 이메일  : " +kakaoProfile.getKakao_account().getEmail());
-		System.out.println("블로그 서버 패스워드 : "+cosKey);
+	public String kakaoCallback(String code,
+			HttpSession session, OAuthToken token) throws URISyntaxException { // Data를 리턴해주는 컨트롤러 함수
+				
+		token = memberService.tokenSearch(code);
 		MemberVO kakaoUser = new MemberVO();
-		kakaoUser.setMemberName(kakaoProfile.getKakao_account().getEmail());
-		kakaoUser.setMemberPw(cosKey);
-		kakaoUser.setMemberId(kakaoProfile.getKakao_account().getEmail());
-		kakaoUser.setMemberNickName(kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
-		kakaoUser.setMemberEmail(kakaoProfile.getKakao_account().getEmail());
-		// 가입자 혹은 비가입자 체크해서 처리
-		MemberVO originMember = memberService.selectOne(kakaoUser.getMemberName());
+		KakaoProfile profile = memberService.kakaoLogin(code,token);
+		String memberEmail = profile.kakao_account.getEmail();
+		String memberId = profile.kakao_account.getEmail();
+		String memberPw = cosKey;
+		String memberName = profile.properties.getNickname();
+		String memberNickName = profile.properties.getNickname();
+		MemberVO originalMember = memberService.selectOne(profile.kakao_account.getEmail());
 		
-		if(originMember == null) {
-			System.out.println("기존 회원이 아니므로 자동 회원가입을 진행합니다.");
+		if(originalMember == null) {
+			System.out.println("회원가입을 진행합니다");
+			kakaoUser.setMemberId(memberId);
+			kakaoUser.setMemberPw(memberPw);
+			kakaoUser.setMemberName(memberName);
+			kakaoUser.setMemberNickName(memberNickName);
+			kakaoUser.setMemberEmail(memberEmail);
+			
 			memberService.memberJoin(kakaoUser);
+		}else {
+			System.out.println("기존회원이므로 로그인을 진행합니다.");
 		}
-		System.out.println("자동 로그인을 진행합니다.");
-		session.setAttribute("member", access_token);
-		session.setAttribute("refresh_token", oAuthToken.getRefresh_token());
+		
+		session.setAttribute("member",token.getAccess_token());
+		session.setAttribute("refresh_token",token.getRefresh_token());
+		
+		
+		String accessToken = token.getAccess_token();
+		System.out.println(accessToken);
+		System.out.println(profile);
 		return "redirect:/";
 	}
 	
@@ -409,8 +349,9 @@ public class MemberController {
 	        System.out.println("이름 : "+name);
 	      
 	        
+	        
 	        MemberVO googleUser = new MemberVO();
-	        googleUser.setMemberName(name);
+	        googleUser.setMemberName(email);
 	        googleUser.setMemberEmail(email);
 	        googleUser.setMemberId(email);
 	        googleUser.setMemberPw(cosKey);
@@ -427,21 +368,26 @@ public class MemberController {
 	        session.setAttribute("member",resultEntity.getBody().getAccess_token());
 	        session.setAttribute("refresh_token", resultEntity.getBody().getRefresh_token());
 	       
-	        
-	      
-	      
-	        
+    	        
 	        return "redirect:/";
-		
-		
-		
-		
-		
-		
-	
-		
+
 		
 	}
+	
+	@GetMapping("/facebook/auth")
+	@ResponseBody
+	public String facebookLogin(String code, FacekbookResponse token) throws URISyntaxException {
+		
+		 token = memberService.facebookTokenSearch(code);
+		FacebookProfile profile = memberService.facebookLogin(code, token);
+		System.out.println(profile);
+	
+		return profile.toString();
+	}
+	
+	
+	
+	
 	
 	
 	
